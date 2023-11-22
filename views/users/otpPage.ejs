@@ -7,18 +7,25 @@
           <div class="otp-form">
               <h2 class="text-center mb-4">OTP Verification</h2>
               
-              <form id="form" method="post">
+              <form id="form" method="post" action="/verify">
                   <div class="mb-3">
                       <label for="otp" class="form-label">Enter 4-digit OTP</label>
-                      <input type="text" class="form-control" id="otp" maxlength="4" pattern="\d{4}" required>
+                      <input type="text" class="form-control" name="otp" id="otp" maxlength="4" pattern="\d{4}" required>
                       <div class="invalid-feedback">
                           Please enter a valid 4-digit OTP.
                       </div>
                   </div>
                   
                   <button type="submit" class="btn btn-primary w-100">Verify OTP</button>
+
               </form>
+              
           </div>
+          <% if (message) { %>
+            <div class="alert text-danger">
+                <%= message %>
+            </div>
+            <% } %>
       </div>
   </div>
 </div>

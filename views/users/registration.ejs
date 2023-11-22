@@ -14,57 +14,47 @@
               <form action="" method="post" id="form" class="">
 
                 <div class="form-outline mb-4">
-                  <input type="text" id="name" name="name" placeholder="Name" class="form-control form-control-sm" required />
+                  <input type="text" id="name" name="name" placeholder="Name" class="form-control form-control-sm"  />
                   <span id="nameError" class="error-message text-danger"></span>
                 </div>
 
                 <div class="form-outline mb-4">
-                  <input type="email" id="email" name="email" placeholder="Email" class="form-control form-control-sm   " required />
+                  <input type="email" id="email" name="email" placeholder="Email" class="form-control form-control-sm   "  />
                   <span id="emailError" class="error-message text-danger"></span>
                 </div>
 
                 <div class="form-outline mb-4">
-                    <input type="number" id="mobile" name="mobile" required placeholder="Phone Number" class="form-control form-control-sm" />
+                    <input type="number" id="mobile" name="mobile"  placeholder="Phone Number" class="form-control form-control-sm" />
                     <span id="mobileError" class="error-message text-danger"></span>
                   </div>
   
 
                 <div class="form-outline mb-4">
-                  <input type="password" id="password" name="password" required placeholder="Password" class="form-control form-control-sm" />
+                  <input type="password" id="password" name="password"  placeholder="Password" class="form-control form-control-sm" />
                   <span id="passwordError" class="error-message text-danger"></span>
                 </div
 
                 <div class="form-outline mb-3">
-                  <input type="password" id="confirmPassword" placeholder="Confirm Password" required name="password" class="form-control form-control-sm" />
+                  <input type="password" id="confirmPassword" placeholder="Confirm Password"   class="form-control form-control-sm" />
                   <span id="confirmPasswordError" class="error-message text-danger"></span>
                 </div>
 
-                <div class="form-check d-flex justify-content-center ">
-                    <div class="col-1 ps-5">
-                    <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3cg" />
-            
-                </div>
-                  <!-- <label class="form-check-label" for="form2Example3g"> -->
-                    <div class="col">
-                    I agree all statements in <a href="#!" class="text-body"><u>Terms of service</u></a>
-                </div>
-                  </label>
-                </div>
 
                 <div class="d-flex justify-content-center">
                   <button type="submit"
                     class="btn btn-success btn-lg gradient-custom-4 text-body">Register</button>
 
                 </div>
+                  <!-- Error messages and links -->
+                  <% if (message) { %>
+                    <div class="alert text-danger">
+                   <%= message %>
+                    </div>
+               <% } %>
 
-                <p class="text-center text-muted mt-4   mb-0">Have already an account? <a href="#!"
+                <p class="text-center text-muted mt-4   mb-0">Have already an account? <a href="/login"
                     class="fw-bold text-body"><u>Login here</u></a></p>
-                     <!-- Error messages and links -->
-                     <% if (message) { %>
-                          <div class="alert text-danger">
-                         <%= message %>
-                          </div>
-                     <% } %>
+                   
 
               </form>
 
@@ -86,45 +76,13 @@
         const confirmPassword = document.getElementById('confirmPassword').value;
         if (!validateName(name)) {
                 verified = false;
-                <section class="container-fluid bg-body-tertiary d-block">
-  <div class="row justify-content-center">
-      <div class="col-12 col-md-6 col-lg-4" style="min-width: 500px;">
-        <div class="card bg-white mb-5 mt-5 border-0" style="box-shadow: 0 12px 15px rgba(0, 0, 0, 0.02);">
-          <div class="card-body p-5 text-center">
-            <h4>Verify</h4>
-            <p>Your code was sent to you via email</p>
-
-            <div class="otp-field mb-4">
-              <input type="number" />
-              <input type="number" disabled />
-              <input type="number" disabled />
-              <input type="number" disabled />
-              <input type="number" disabled />
-              <input type="number" disabled />
-            </div>
-
-            <button class="btn btn-primary mb-3">
-              Verify
-            </button>
-
-            <p class="resend text-muted mb-0">
-              Didn't receive code? <a href="">Request again</a>
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-</section>    }
+            }
 
             if (!validateEmail(email)) {
                 verified = false;
             }
 
-            if (!validatePhone(phone)) {
-                verified = false;
-            }
-
-            if (!validateImage(image)) {
+            if (!validatePhone(mobile)) {
                 verified = false;
             }
 
@@ -140,7 +98,8 @@
             }
     });
         function validateName(name) {
-            const nameRegex = /^[A-Z][a-z ]+$/;
+            const nameRegex = /^[a-zA-Z ]+$/;
+;
             if (nameRegex.test(name)) {
                 return true;
             } else {
@@ -159,7 +118,7 @@
         }
         function validatePhone(mobile) {
             const phoneRegex = /^\d{10}$/;
-            if (phoneRegex.test(phone)) {
+            if (phoneRegex.test(mobile)) {
                 return true;
             } else {
                 document.getElementById('mobileError').innerHTML = 'Phone number must contain 10 digits';

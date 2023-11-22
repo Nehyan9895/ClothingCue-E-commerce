@@ -1,0 +1,28 @@
+<%- include('../layouts/header.ejs') -%>
+
+<div class="text-center center-div" id="login">
+    <div class="container w-25 border py-5">
+        <div class="title pb-5">
+            <h2 class="font-weight-bold">User Login Form</h2>
+            <span>User Login</span>
+        </div>
+        <form action="/login" method="post">
+            <div class="form-group">
+                <input type="email" class="form-control" name="email" placeholder="Enter email" required>
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" name="password" placeholder="Enter password" required>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-success">Submit</button>
+            </div>
+        </form>
+        <% if (message) { %>
+            <div class="alert alert-<%= message.startsWith('Login successful') ? 'success' : 'danger' %>">
+                <%= message %>
+            </div>
+        <% } %>
+        <p>Are you a new user. Click here to <a href="register">register</a>.</p>
+    </div>
+</div> 
+<%- include('../layouts/footer.ejs') -%>
