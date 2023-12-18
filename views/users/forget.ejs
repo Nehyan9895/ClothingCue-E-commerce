@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Forget Password</title>
+    <!-- Add Bootstrap CSS link -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        /* Add custom styles here if needed */
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .forget-password-container {
+            max-width: 400px;
+            margin: auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+
+        /* Add additional styles as needed */
+    </style>
+</head>
+
+<body>
+    <div class="container forget-password-container">
+        <h1 class="text-center">Forget Password</h1>
+        <!-- Forget password form goes here -->
+        <form action="/forget" method="post" id="forgetPasswordForm">
+            <div class="form-group">
+                <label for="email">Enter your email:</label>
+                <input type="email" class="form-control" id="email" name="email" required>
+                <input type="hidden" id="otpExpiration">
+
+            </div>
+            <button type="button" class="btn btn-primary btn-block" onclick="sendOTP()">Send OTP</button>
+
+            <!-- OTP input field initially hidden -->
+            <div id="otpContainer" class="form-group" style="display: none;">
+                <label for="otp">Enter OTP:</label>
+                <input type="text" class="form-control" pattern="\d{4}" title="Please enter a valid 4-digit OTP." id="otp" name="otp" required>
+            </div>
+
+            <button type="submit" class="btn btn-success btn-block" style="display: none;">Submit OTP</button>
+            <% if (message) { %>
+              <div class="alert alert-<%= message.startsWith('Login successful') ? 'success' : 'danger' %>">
+                  <%= message %>
+              </div>
+          <% } %>
+        </form>
+
+        <!-- Display any messages -->
+        <p id="errorMessage" class="mt-3 text-center text-danger"></p>
+
+        <!-- You can include a link back to the login page if needed -->
+        <p class="mt-3 text-center"><a href="/login">Back to Login</a></p>
+    </div>
+
+    <!-- Add Bootstrap JS and Popper.js if needed -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+   <!-- ... your existing JavaScript ... -->
+
+<script>
+ function sendOTP() {
+    // Get the email value from the input field
+    const email = document.getElementById('email').value;
+
+    // Make an AJAX request to your server to send OTP
+    fetch('/sendOtp', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+    })
+    .then(response => {
+        // Check if the response status is OK (200)
+        if (response.ok) {
+            // Use the provided code to handle different content types
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                // If the content type is JSON, parse the response as JSON
+                return response.json();
+            } else {
+                // If the content type is not JSON, handle it as plain text
+                return response.text();
+            }
+        } else {
+            // If the response status is not OK, reject the promise with an error
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+    })
+    .then(data => {
+        // Handle the response, update UI if needed
+        console.log('Response:', data);
+
+        // Show OTP input field and submit button
+        document.getElementById('otpContainer').style.display = 'block';
+        document.querySelector('button[type="submit"]').style.display = 'block';
+
+        // Hide "Send OTP" button
+        document.querySelector('button[type="button"]').style.display = 'none';
+
+        // Set the email and OTP expiration time in the hidden input fields
+        document.getElementById('email').value = email;
+        document.getElementById('otpExpiration').value = data.expiresAt;
+    })
+    .catch(error => {
+        // Handle errors, display error message
+        console.error('Error sending OTP', error);
+        document.getElementById('errorMessage').innerText = 'Error sending OTP. Please try again.';
+    });
+}
+
+</script>
+
+
+</html>

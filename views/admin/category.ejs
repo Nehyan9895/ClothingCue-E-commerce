@@ -60,7 +60,7 @@
                         <span class="text">Products</span>
                     </a>
                     <div class="submenu">
-                        <a href="page-sellers-cards.html">Products List</a>
+                        <a href="productList">Products List</a>
                         <a href="page-sellers-list.html">Add Products</a>
                         <a href="page-seller-detail.html">Edit Products</a>
                         <a href="category.ejs">Categories</a>
@@ -225,17 +225,22 @@
                                 <div class="d-grid">
                                     <button type="submit" class="btn btn-primary">Create category</button>
                                 </div>
+                                <% if (message) { %>
+                                    <div class="alert">
+                                        <%= message %>
+                                    </div>
+                                <% } %>
                             </form>
                         </div>
                         <div class="col-md-9">
                             <div class="table-responsive">
-                                <table class="table table-hover">
+                                <table class="table table-hover" id="example">
                                     <thead>
                                         <tr>
                                             
                                             <th>Name</th>
-                                            <th>Description</th>
                                             <th>Type</th>
+                                            <th>Description</th>
                                             <th>Status</th>
                                             <th class="text-end">Action</th>
                                         </tr>
@@ -259,23 +264,24 @@
                             } else {
                         %>
                         <p class="badge rounded-pill alert-danger">Not Active</p>
-                        <%
-                            }
-                        %>
-                    </td>  
-                    <td class="text-end">
-                                                <div class="dropdown">
-                                                    <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
-                                                    <div class="dropdown-menu">
-                                                        <a class="dropdown-item" href="/admin/editcategory/<%=categories[i]._id%>">Edit info</a>
-                                                        <% if(categories[i].status) { %>
-                                                        <a class="dropdown-item text-danger"  onclick="categoryAction0(`<%=categories[i]._id %>`)">Block</a>
-                                                        <%}else{%>
-                                                            <a class="dropdown-item text-success" onclick="categoryAction1(`<%=categories[i]._id %>`)">UnBlock</a>
-                                                            <%}%>
-                                                    </div>
-                                                </div> <!-- dropdown //end -->
-                                            </td>
+                        <% } %>
+                        </td>  
+
+                        
+                        <td class="text-end">
+                                                    <div class="dropdown">
+                                                        <a href="#" data-bs-toggle="dropdown" class="btn btn-light rounded btn-sm font-sm"> <i class="material-icons md-more_horiz"></i> </a>
+                                                        <div class="dropdown-menu">
+                                                            <a class="dropdown-item" href="editCategory/<%= categories[i]._id%>">Edit info</a>
+                                                            <input type="hidden" name="categoryId" value="<%= categories[i]._id %>">
+                                                            <% if(categories[i].status) { %>
+                                                            <a class="dropdown-item text-danger"  onclick="confirmBlockCategory(`<%=categories[i]._id %>`,'false')">Block</a>
+                                                            <%}else{%>
+                                                                <a class="dropdown-item text-success" onclick="confirmBlockCategory(`<%=categories[i]._id %>`,'true')">UnBlock</a>
+                                                                <%}%>
+                                                        </div>
+                                                    </div> <!-- dropdown //end -->
+                                                </td>
                 </tr>
                 <%
                     }
@@ -305,6 +311,8 @@
             </div>
         </footer>
     </main>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     <script src="/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/admin-assets/js/vendors/select2.min.js"></script>
@@ -312,6 +320,34 @@
     <script src="/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
     <script src="/admin-assets/js/main.js" type="text/javascript"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<script>
+    $(document).ready(function () {
+        new DataTable('#example');
+
+})
+    <script>
+        function confirmBlockCategory(categoryId,act) {
+        swal({
+            title: "Are you sure?",
+            text: "This action will Block The category",
+            icon: "warning",
+            buttons: ["Cancel", "Yes"],
+            dangerMode: true,
+        }).then((result) => {
+            if (!result.isConfirmed) {
+                window.location.href=`blockCategories?categoryId=${categoryId}&act=${act}`;
+
+            } else {
+                console.log('ggggt');
+            }
+        });
+        
+    }
+        </script>
 </body>
 
 

@@ -74,6 +74,13 @@
         const mobile = document.getElementById('mobile').value;
         const password = document.getElementById('password').value;
         const confirmPassword = document.getElementById('confirmPassword').value;
+
+        document.getElementById('nameError').innerHTML = '';
+        document.getElementById('emailError').innerHTML = '';
+        document.getElementById('mobileError').innerHTML = '';
+        document.getElementById('confirmPasswordError').innerHTML = '';
+        document.getElementById('passwordError').innerHTML = '';
+        
         if (!validateName(name)) {
                 verified = false;
             }

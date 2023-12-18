@@ -28,18 +28,21 @@ const userSchema = new mongoose.Schema({
     wallet:{
         type : Number
     },
-    address:[
-        {
-            addressName : String,
-            type : String,
-            houseNo : String,
-            city : String,
-            landMark : String,
-            state : String,
-            pincode : Number,
-            phone : Number,
-            altPhone : Number
-        }
-    ]
+    address:[{
+        addressName:{type:String},
+        house:{type:String},
+        city:{type:String},
+        landmark:{type:String},
+        country:{type:String},
+        pincode:{type:Number},
+        phone:{type:Number},
+        road:{type:String},
+        fname:{type:String},
+        lname:{type:String},
+        description:{type:String}
+    }],
+    image:{
+        type:String
+    }
 })
-module.exports = mongoose.model('users',userSchema);
+module.exports = mongoose.model('User',userSchema);

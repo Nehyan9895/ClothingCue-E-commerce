@@ -1,0 +1,284 @@
+﻿<!DOCTYPE html>
+<html class="no-js" lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Jul 2023 10:11:15 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>Clothing Cue</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link rel="stylesheet" href="assets/css/maind134.css?v=3.4">
+   
+
+
+</head>
+
+<body>
+    
+    
+    <main class="main" id="PDF">
+        <div class="page-header breadcrumb-wrap">
+            <div class="container">
+                <div class="breadcrumb">
+                    <a href="/" rel="nofollow">Home</a>
+                    <span></span> Account
+                </div>
+            </div>
+        </div>
+        
+        <section class="content-main" >
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Order detail</h2>
+                    <p>Details for Order ID: <%=order.orderID%></p>
+                </div>
+            </div>
+            <div class="card" >
+                <header class="card-header">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6 col-md-6 mb-lg-0 mb-15">
+                            <span>
+                                <i class="material-icons md-calendar_today"></i>Date :  <b><%=(new Date(order.orderDate)).toLocaleString()%></b>
+                            </span> <br>
+                            <small class="text-muted">Order ID: <%=order.orderID%></small>
+                        </div>
+                        
+                    </div>
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                    <div class="row mb-50 mt-20 order-info-wrap">
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-person"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Customer</h6>
+                                    <p class="mb-1">
+                                        <%=order.userId.name%> <br> <%=order.userId.email%> <br> +91<%=order.userId.mobile%>
+                                    </p>
+                                    <a href="#">View profile</a>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-local_shipping"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Order info</h6>
+                                    <p class="mb-1">
+                                        Shipping: Free Shipping <br> Pay method:<%=order.PaymentMethod%><br> Status:
+                                        <%if(order.orderStatus=='Order Placed'|| order.orderStatus=='Shipped'||order.orderStatus=='Delivered'){%>
+                                            <span class="badge rounded-pill alert-success text-success"><%=order.orderStatus%></span>
+                                            <%}else {%>
+                                                <span class="badge rounded-pill alert-danger"><%=order.orderStatus%></span>
+                                            <%}%>
+                                         
+                                    </p>
+                                    <a href="#">Download info</a>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                        <div class="col-md-4">
+                            <article class="icontext align-items-start">
+                                <span class="icon icon-sm rounded-circle bg-primary-light">
+                                    <i class="text-primary material-icons md-place"></i>
+                                </span>
+                                <div class="text">
+                                    <h6 class="mb-1">Deliver to</h6>
+                                    <p class="mb-1">
+                                      
+                                        <h6 class="text-muted"><%=order.address.addressName%></h6>
+                                        City:<%=order.address.city%>, <br><%=order.address.fname%><br> ,Landmark: <%=order.address.landmark%>,<%=order.address.house%><br>
+                                         Locality:<%=order.address.road%>,<br>
+                                         Pincode:<%=order.address.pincode%><br>
+                                    </p>
+                                    <a href="#">View profile</a>
+                                </div>
+                            </article>
+                        </div> <!-- col// -->
+                    </div> <!-- row // -->
+                    <div class="row">
+                        <div class="col-lg-7">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th width="40%">Product</th>
+                                            <th width="20%">Unit Price</th>
+                                            <th width="20%">Quantity</th>
+                                            <th width="20%" class="text-end">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <%for(let i=0;i<order.products.length;i++){%>
+                                        <tr>
+                                            <td>
+                                                <a class="itemside" href="#">
+                                                   
+
+                                                    <div class="left">
+                                                        <img src="/<%=order.products[i].productId.images[0]%>" width="70" height="70" class="img-sm" alt="Item">
+                                                    </div>
+                                                    <div class="info"><%=order.products[i].productId.name%>, <%=order.products[i].size%> size </div>
+                                                </a>
+                                            </td>
+                                            <td> ₹<%=order.products[i].productId.salesPrice%> </td>
+                                            <td> <%=order.products[i].quantity%> </td>
+                                            <td class="text-end"> ₹<%=order.products[i].productId.salesPrice * order.products[i].quantity %> </td>
+                                        </tr>
+                                        <%}%>
+                                
+                                    
+
+                                        <tr>
+                                            <td colspan="4">
+                                                
+                                                <article class="float-end">
+                                                    
+                                                        <span>Subtotal:</span>&nbsp&nbsp&nbsp&nbsp<span>₹<%=order.totalAmount%></span><br>
+                                                        <span>Shipping cost:</span>&nbsp&nbsp&nbsp&nbsp<span>₹0.00</span><br>
+                                                       
+    
+                                                        <span>Status:</span>&nbsp&nbsp&nbsp&nbsp
+
+                                                        <%if(order.paymentStatus=='Success'){%>
+                                                        <span class="badge rounded-pill alert-success text-success"><%=order.paymentStatus%></span>
+                                                        <%}else{%>
+                                                            <span class="badge rounded-pill alert-danger text-danger"><%=order.paymentStatus%></span>
+                                                            <%}%>
+                                                          
+                                                </article>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div> <!-- table-responsive// -->
+                        </div> <!-- col// -->
+                        <div class="col-lg-1"></div>
+                        <div class="col-lg-4">
+                            <div class="box shadow-sm bg-light">
+                                <h6 class="mb-15">Payment info</h6>
+                                <p>
+                                    <!-- <img src="/assetsb/imgs/card-brands/2.png" class="border" height="20"> Master Card **** **** 4768 <br> -->
+                                    Payment: <h6><%=order.PaymentMethod%></h6>
+                                    Business name: <%=order.userId.name%><br>
+                                    Phone: +91 <%=order.userId.mobile%>
+                                </p>
+                            </div>
+                
+
+
+                            <div class="h-25 pt-4">
+                                
+                                <%if(order.orderStatus=='Order Placed'|| order.orderStatus=='Shipped'){%>
+                                    <button onclick="cancelOrder('<%=order._id%>')" class="btn btn-danger" style="background-color: rgb(153, 11, 11);" >Cancel Order</button>
+                                <%}else if(order.orderStatus=='Delivered'){%>
+                                    <button class="btn btn-warning" onclick="userReturnOrder(`<%=order._id%>`)" style="background-color: rgb(226, 128, 43);" >Return Order</button>
+                                <%}else{%>
+                                     <a href="/" class="btn btn-sm">Continue Shoping</a>
+                                    <%}%>
+                           <button id="print" class="btn btn-brand" >Download Invoice</button>
+                            </div>
+                        </div> <!-- col// -->
+                    </div>
+                </div> <!-- card-body end// -->
+            </div> <!-- card end// -->
+        </section>  <!-- content-main end// -->
+    
+<script>
+document
+  .getElementById('print')
+  .addEventListener('click', function() {
+    window.print();
+  });
+</script>
+
+          
+
+    </main>
+    
+    <!-- Preloader Start -->
+    <div id="preloader-active">
+        <div class="preloader d-flex align-items-center justify-content-center">
+            <div class="preloader-inner position-relative">
+                <div class="text-center">
+                    <h5 class="mb-5">Now Loading</h5>
+                    <div class="loader">
+                        <div class="bar bar1"></div>
+                        <div class="bar bar2"></div>
+                        <div class="bar bar3"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Add this script in your HTML file, or include it in your JavaScript file -->
+
+    <script>
+        function cancelOrder(orderId) {
+          fetch(`/usercancelorder?OID=${orderId}`)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+              }
+              return response.json();
+            })
+            .then(data => {
+              // Handle the response or update the UI as needed
+              console.log(data);
+            })
+            .catch(error => {
+              console.error('Error cancelling order:', error.message);
+              // Handle errors or show a user-friendly message
+            })
+            .finally(() => {
+              // Reload the page after the fetch operation completes
+              location.reload();
+            });
+        }
+      </script>
+      
+      
+
+    <!-- Vendor JS-->
+    <script src="assets/js/vendor/modernizr-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-3.6.0.min.js"></script>
+    <script src="assets/js/vendor/jquery-migrate-3.3.0.min.js"></script>
+    <script src="assets/js/vendor/bootstrap.bundle.min.js"></script>
+    <script src="assets/js/plugins/slick.js"></script>
+    <script src="assets/js/plugins/jquery.syotimer.min.js"></script>
+    <script src="assets/js/plugins/wow.js"></script>
+    <script src="assets/js/plugins/jquery-ui.js"></script>
+    <script src="assets/js/plugins/perfect-scrollbar.js"></script>
+    <script src="assets/js/plugins/magnific-popup.js"></script>
+    <script src="assets/js/plugins/select2.min.js"></script>
+    <script src="assets/js/plugins/waypoints.js"></script>
+    <script src="assets/js/plugins/counterup.js"></script>
+    <script src="assets/js/plugins/jquery.countdown.min.js"></script>
+    <script src="assets/js/plugins/images-loaded.js"></script>
+    <script src="assets/js/plugins/isotope.js"></script>
+    <script src="assets/js/plugins/scrollup.js"></script>
+    <script src="assets/js/plugins/jquery.vticker-min.js"></script>
+    <script src="assets/js/plugins/jquery.theia.sticky.js"></script>
+    <!-- Template  JS -->
+    <script src="assets/js/maind134.js?v=3.4"></script>
+    <script src="/assets/js/userValidate.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+   
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-frontend/page-account.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 15 Jul 2023 10:11:15 GMT -->
+</html>

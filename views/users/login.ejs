@@ -1,28 +1,197 @@
-<%- include('../layouts/header.ejs') -%>
+<!DOCTYPE html>
+<html lang="en">
 
-<div class="text-center center-div" id="login">
-    <div class="container w-25 border py-5">
-        <div class="title pb-5">
-            <h2 class="font-weight-bold">User Login Form</h2>
-            <span>User Login</span>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>CLOTHING CUE</title>
+</head>
+
+<body>
+
+    <div class="container" id="container">
+        <div class="form-container sign-up">
+            <form action="/register" method="post" id="form">
+                <h1>Create Account</h1>
+                <div>
+                    <input type="text" placeholder="Name" id="name" name="name">
+                    <span id="nameError" class="error-message text-danger"></span>
+                </div>
+                
+                <div>
+                    <input type="email" id="email" placeholder="Email" name="email">
+                    <span id="emailError" class="error-message text-danger"></span>
+                </div>
+                <div>
+                    <input type="number" id="mobile" name="mobile" placeholder="phone number">
+                    <span id="mobileError" class="error-message text-danger"></span>
+                </div>
+                <div>
+                    <input type="password" id="password" placeholder="Password" name="password">
+                    <span id="passwordError" class="error-message text-danger"></span>
+                </div>
+                <div>
+                    <input type="password"  id="confirmPassword" placeholder="Confirm Password">
+                    <span id="confirmPasswordError" class="error-message text-danger"></span>
+                </div>
+                <button>Sign Up</button>
+                <% if (message1) { %>
+                    <div class="alert text-danger">
+                   <%= message1 %>
+                    </div>
+               <% } %>
+            </form>
         </div>
-        <form action="/login" method="post">
-            <div class="form-group">
-                <input type="email" class="form-control" name="email" placeholder="Enter email" required>
+        <div class="form-container sign-in">
+            <form action="/login" id="form" method="post">
+                <h1>Sign In</h1>
+                <input type="email" placeholder="Email" name="email">
+                <input type="password" placeholder="Password" name="password">
+                <a href="forget">Forget Your Password?</a>
+                <button>Sign In</button>
+                <% if (message) { %>
+                    <div class="alert alert-<%= message.startsWith('Login successful') ? 'success' : 'danger' %>">
+                        <%= message %>
+                    </div>
+                <% } %>
+            </form>
+        </div>
+        <div class="toggle-container">
+            <div class="toggle">
+                <div class="toggle-panel toggle-left">
+                    <h1>Welcome Back!</h1>
+                    <p>Enter your personal details to use all of site features</p>
+                    <button class="hidden" id="login">Sign In</button>
+                </div>
+                <div class="toggle-panel toggle-right">
+                    <h1>Welcome, Friend!</h1>
+                    <p>Enter your personal details to use all of site features</p>
+                    <button class="hidden" id="register">Sign Up</button>
+                </div>
             </div>
-            <div class="form-group">
-                <input type="password" class="form-control" name="password" placeholder="Enter password" required>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-success">Submit</button>
-            </div>
-        </form>
-        <% if (message) { %>
-            <div class="alert alert-<%= message.startsWith('Login successful') ? 'success' : 'danger' %>">
-                <%= message %>
-            </div>
-        <% } %>
-        <p>Are you a new user. Click here to <a href="register">register</a>.</p>
+        </div>
     </div>
-</div> 
-<%- include('../layouts/footer.ejs') -%>
+
+    <script >
+        const container = document.getElementById('container');
+const registerBtn = document.getElementById('register');
+const loginBtn = document.getElementById('login');
+
+registerBtn.addEventListener('click', () => {
+    container.classList.add("active");
+});
+
+loginBtn.addEventListener('click', () => {
+    container.classList.remove("active");
+});
+    </script>
+
+<script>
+   function clearErrorMessage(fieldId) {
+        document.getElementById(fieldId + 'Error').innerHTML = '';
+    }
+
+    // Event listeners for input fields to clear error messages
+    document.getElementById('name').addEventListener('input', function () {
+        clearErrorMessage('name');
+    });
+
+    document.getElementById('email').addEventListener('input', function () {
+        clearErrorMessage('email');
+    });
+
+    document.getElementById('mobile').addEventListener('input', function () {
+        clearErrorMessage('mobile');
+    });
+
+    document.getElementById('password').addEventListener('input', function () {
+        clearErrorMessage('password');
+    });
+
+    document.getElementById('confirmPassword').addEventListener('input', function () {
+        clearErrorMessage('confirmPassword');
+    });
+
+    // Form submission validation
+    document.getElementById('form').addEventListener('submit', function (e) {
+        e.preventDefault();
+        let verified = true;
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+        const mobile = document.getElementById('mobile').value;
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        // Clear all error messages
+        clearErrorMessage('name');
+        clearErrorMessage('email');
+        clearErrorMessage('mobile');
+        clearErrorMessage('password');
+        clearErrorMessage('confirmPassword');
+
+        if (!validateName(name)) {
+            verified = false;
+        }
+
+        if (!validateEmail(email)) {
+            verified = false;
+        }
+
+        if (!validatePhone(mobile)) {
+            verified = false;
+        }
+
+        if (password !== confirmPassword) {
+            document.getElementById('confirmPasswordError').innerHTML = "Passwords don't match";
+            verified = false;
+        } else if (!validatePassword(password)) {
+            verified = false;
+        }
+
+        if (verified) {
+            this.submit();
+        }
+    });
+        function validateName(name) {
+            const nameRegex = /^[a-zA-Z ]+$/;
+;
+            if (nameRegex.test(name)) {
+                return true;
+            } else {
+                document.getElementById('nameError').innerHTML = 'Invalid Name';
+                return false;
+            }
+        }
+        function validateEmail(email) {
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (emailRegex.test(email)) {
+                return true;
+            } else {
+                document.getElementById('emailError').innerHTML = 'Invalid Email';
+                return false;
+            }
+        }
+        function validatePhone(mobile) {
+            const phoneRegex = /^\d{10}$/;
+            if (phoneRegex.test(mobile)) {
+                return true;
+            } else {
+                document.getElementById('mobileError').innerHTML = 'Phone number must contain 10 digits';
+                return false;
+            }
+        }
+        function validatePassword(password) {
+            const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+            if (passwordRegex.test(password)) {
+                return true;
+            } else {
+                document.getElementById('passwordError').innerHTML = 'Password must contain at least one letter and one number, and be at least 8 characters long';
+                return false;
+            }
+        }
+</script>
+</body>
+
+</html>

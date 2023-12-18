@@ -9923,3 +9923,18 @@ span.fi-rs-apps {
 .zoomContainer{ z-index: 9999;}
 .zoomWindow{ z-index: 9999;}
 /*# sourceMappingURL=main.css.map */
+.small-search {
+  display: flex;
+  align-items: center;
+}
+
+.small-search input {
+  flex: 1;
+  border-radius: 4px 0 0 4px;
+  padding: 5px;
+}
+
+.small-search button {
+  border-radius: 0 4px 4px 0;
+  padding: 5px;
+}

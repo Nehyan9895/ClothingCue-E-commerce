@@ -60,10 +60,10 @@
                         <span class="text">Products</span>
                     </a>
                     <div class="submenu">
-                        <a href="page-sellers-cards.html">Products List</a>
+                        <a href="productList">Products List</a>
                         <a href="page-sellers-list.html">Add Products</a>
                         <a href="page-seller-detail.html">Edit Products</a>
-                        <a href="page-seller-detail.html">Categories</a>
+                        <a href="category">Categories</a>
                     </div>
                 </li>
                 <li class="menu-item has-submenu">
@@ -195,31 +195,10 @@
                 </div>
             </div>
             <div class="card mb-4">
-                <header class="card-header">
-                    <div class="row gx-3">
-                        <div class="col-lg-4 col-md-6 me-auto">
-                            <input type="text" placeholder="Search..." class="form-control">
-                        </div>
-                        <div class="col-lg-2 col-md-3 col-6">
-                            <select class="form-select">
-                                <option>Status</option>
-                                <option>Active</option>
-                                <option>Disabled</option>
-                                <option>Show all</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-2 col-md-3 col-6">
-                            <select class="form-select">
-                                <option>Show 20</option>
-                                <option>Show 30</option>
-                                <option>Show 40</option>
-                            </select>
-                        </div>
-                    </div>
-                </header> <!-- card-header end// -->
+                
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-hover">
+                        <table class="table table-hover" id="example">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -332,6 +311,14 @@
     }
     
 </script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            new DataTable('#example');
+
+    });</script>
 </body>
 
 
