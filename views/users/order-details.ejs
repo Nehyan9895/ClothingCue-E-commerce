@@ -17,7 +17,8 @@
     <link rel="shortcut icon" type="image/x-icon" href="assets/imgs/theme/favicon.svg">
     <!-- Template CSS -->
     <link rel="stylesheet" href="assets/css/maind134.css?v=3.4">
-   
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10">
+
 
 
 </head>
@@ -147,7 +148,7 @@
                                                 
                                                 <article class="float-end">
                                                     
-                                                        <span>Subtotal:</span>&nbsp&nbsp&nbsp&nbsp<span>₹<%=order.totalAmount%></span><br>
+                                                        <span>Subtotal:</span>&nbsp&nbsp&nbsp&nbsp<span>₹<%=order.discountedAmount%></span><br>
                                                         <span>Shipping cost:</span>&nbsp&nbsp&nbsp&nbsp<span>₹0.00</span><br>
                                                        
     
@@ -226,30 +227,94 @@ document
     </div>
     <!-- Add this script in your HTML file, or include it in your JavaScript file -->
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
     <script>
         function cancelOrder(orderId) {
-          fetch(`/usercancelorder?OID=${orderId}`)
-            .then(response => {
-              if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-              }
-              return response.json();
-            })
-            .then(data => {
-              // Handle the response or update the UI as needed
-              console.log(data);
-            })
-            .catch(error => {
-              console.error('Error cancelling order:', error.message);
-              // Handle errors or show a user-friendly message
-            })
-            .finally(() => {
-              // Reload the page after the fetch operation completes
-              location.reload();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, cancel it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/usercancelorder?OID=${orderId}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Handle the response or update the UI as needed
+                            console.log(data);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Order Cancelled!',
+                                text: 'Your order has been successfully cancelled.',
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error cancelling order:', error.message);
+                            // Handle errors or show a user-friendly message
+                            
+                        })
+                        .finally(() => {
+                            // Reload the page after the fetch operation completes
+                            location.reload();
+                        });
+                }
             });
         }
-      </script>
-      
+    </script>
+    
+    <script>
+        function userReturnOrder(orderId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'You won\'t be able to revert this!',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, return it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    fetch(`/userreturnorder?OID=${orderId}`)
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error(`HTTP error! Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            // Handle the response or update the UI as needed
+                            console.log(data);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Order Returned!',
+                                text: 'Your order has been successfully returned.',
+                            });
+                        })
+                        .catch(error => {
+                            console.error('Error returning order:', error.message);
+                            // Handle errors or show a user-friendly message
+                            
+                        })
+                        .finally(() => {
+                            // Reload the page after the fetch operation completes
+                            location.reload();
+                        });
+                }
+            });
+        }
+    </script>
+    
+    
+    
       
 
     <!-- Vendor JS-->

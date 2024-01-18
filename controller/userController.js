@@ -1,14 +1,16 @@
 const User = require('../model/userModel');
 const nodemailer = require('nodemailer');
+const mongoose = require('mongoose')
 const config = require('../config/config');
 const { error } = require('console');
 const userModel = require('../model/userModel');
 const Products = require('../model/productModel')
 const Cart = require('../model/cartModel')
 const Category = require('../model/categoryModel')
-const Swal = require('sweetalert2')
 const Order = require('../model/orderModel');
-
+const Wishlist = require('../model/wishlistModel');
+const Banner = require('../model/bannerModel')
+const ITEMS_IN_PAGE = 12;
 const otpStore = {};
 function sendVerificationCode(email, req, res) {
 
@@ -58,13 +60,13 @@ function sendVerificationCode(email, req, res) {
                     console.log('OTP destroyed after one minute');
                 }, 60000);
 
-                res.render('otpPage', { message: "" });
+                res.render('otpPage', { message: "",verification:verificationCode });
             }
         })
 
 
     } catch (error) {
-        console.log(error.message);
+        res.render('error')
     }
 };
 
@@ -78,7 +80,7 @@ const loadRegister = async (req, res) => {
         const message = ' ';
         res.render('login', { message1,message});
     } catch (error) {
-        console.log(error.message);
+        res.redirect('/error')
     }
 }
 
@@ -100,9 +102,9 @@ const insertUser = async (req, res) => {
             email: req.body.email,
             mobile: req.body.mobile,
             password: req.body.password,
-            is_verified: 0 //initialize as zero and get one after verificaton
+            is_verified: 1 //initialize as zero and get one after verificaton
         });
-        req.session.user = req.body;
+        req.session.user = user;
         
         if (req.session.user) {
             sendVerificationCode( req.body.email, req, res)
@@ -112,7 +114,7 @@ const insertUser = async (req, res) => {
         }
 
     } catch (error) {
-        console.log(error.message);
+        res.redirect('/error')
     }
 }
 
@@ -122,13 +124,14 @@ const otpVerify = async (req, res) => {
         console.log(req.session.otp, req.body.otp, req.session.user);
 
         if (req.body.otp === req.session.otp) {
+            
             await userModel.insertMany(req.session.user);
-            res.render('homePage');
+            res.redirect('/home');
         } else {
             res.render('otpPage', { message: "Incorrect otp pin" })
         }
     } catch (error) {
-        console.log(error.message);
+        res.redirect('/error')
     }
 }
 
@@ -139,7 +142,7 @@ const resendOtp = async (req, res) => {
     delete otpStore[email];
 
     // Generate and send a new OTP
-    sendVerificationCode(name, email, req, res);
+    sendVerificationCode(email, req, res);
 };
 
 
@@ -149,7 +152,7 @@ const loginLoad = async (req, res) => {
         const message1 = ' ';
         res.render('login', { message ,message1});
     } catch (error) {
-        console.log(error.message);
+        res.redirect('/error')
     }
 }
 
@@ -171,7 +174,7 @@ const verifyLogin = async (req, res) => {
             res.render('login', { message: "Email or password is incorrect",message1 })
         }
     } catch (error) {
-        console.log(error.message);
+        res.redirect('/error')
     }
 }
 
@@ -235,7 +238,7 @@ const verifyForgetOtp = async (req, res) => {
             res.render('forget', { message: 'Incorrect OTP. Please try again.' });
         }
     } catch (error) {
-        console.log(error.message);
+        res.redirect('/error')
     }
 };
 
@@ -260,8 +263,7 @@ const changePassword = async (req, res) => {
         console.log("passowrd changed");
         res.redirect('/login');
     } catch (error) {
-        console.error(error);
-        res.render('reset', { message: 'An error occurred. Please try again.' });
+        res.redirect('/error')
     }
 }
 
@@ -269,35 +271,207 @@ const changePassword = async (req, res) => {
 const loadHome = async (req, res) => {
 
     try {
-
+        const banners = await Banner.find({});
         const userData = await User.findById(req.session.user_id)
-        const productData = await Products.find({})
+        const category = await Category.find({})
+        const productData = await Products.find({}).populate('category')
         req.session.productId = req.query.id;
-
-
-        res.render('homePage', { user: userData, products: productData });
-
-    } catch (error) {
-        console.log(error.message);
-    }
-}
-
-const loadProductDetails = async (req, res) => {
-    try {
-        const productId = req.query.id;
-        const products = await Products.findById(productId)
-        const user = await User.findById(req.session.user_id);
-        if(req.session.user_id){
-            res.render('productDetails', { products,user:user})
-        }else{
-            res.render('productDetails',{products,user})
-        }
+        const productId = req.body.productId;
+        const productIdObject = new mongoose.Types.ObjectId(productId);
+        const totalStock = await Products.aggregate([
+            {
+                $match: {
+                    _id: productIdObject
+                }
+            },
+            {
+                $unwind: "$sizes"
+            },
+            {
+                $addFields: {
+                    totalStock: {
+                        $sum: {
+                            $add: [
+                                "$sizes.s.quantity",
+                                "$sizes.m.quantity",
+                                "$sizes.l.quantity"
+                            ]
+                        }
+                    }
+                }
+            }
+        ]);
         
+        console.log(totalStock);
+
+        if(userData.is_verified==1){
+        res.render('homePage', { user: userData, products: productData,banners,categories:category,totalStock });
+        }else{
+            res.redirect('/login');
+        }
+    } catch (error) {
+        res.redirect('/error')
+    }
+}
+
+const searchResult = async(req,res)=>{
+    try {
+        const searchTerm = req.body.search;
+        const cat = req.body.cat;
+        const catId = await Category.findById(cat);
+        const regex = new RegExp(searchTerm, 'i');
+        const matchingProducts = await Products.find({  status: true, name: regex, category: catId._id });
+
+        const user = await User.findById(req.session.user_id);
+        const categories = await Category.find({});
+
+        if(user.is_verified==1){
+        res.render('searchResult',{products:matchingProducts,user,category:categories,msg:searchTerm})
+        }else{
+            res.redirect('/login');
+        }
+    } catch (error) {
+        console.log(error.message)
+    }
+}
+
+const pagination = async(req,res)=>{
+    try {
+        const page = parseInt(req.query.page)||1;
+        const userId = req.session.user_id;
+        const user = await User.findById(userId);
+        const category = await Category.find({});
+        const products = await Products.find({status:true}).populate('category').skip((page-1)*ITEMS_IN_PAGE).limit(ITEMS_IN_PAGE)
+        const totalProductsCount = await Products.countDocuments({status:true});
+        if(user.is_verified==1){
+        res.render('shop',{products,categories:category,user,category,msg:'fromhome',currentPage:page,totalPages:Math.ceil(totalProductsCount/ITEMS_IN_PAGE)})
+        }else{
+            res.redirect('/login');
+        }
     } catch (error) {
         console.log(error.message);
     }
-
 }
+
+const sorting = async(req,res)=>{
+    try {
+        const by = req.query.by;
+        const page = parseInt(req.query.page)||1;
+        const userId = req.session.user_id;
+        const start = parseInt(req.query.start);
+        console.log(start);
+        const end = parseInt(req.query.end);
+        console.log(end);
+        const user = await User.findById(userId);
+        const category = await Category.find({});
+
+        if(by){
+            if(by>0){
+                sortCriteria = {salesPrice:1};
+            }else if(by<0){
+                sortCriteria = {salesPrice:-1};
+            }
+            var products = await Products.find({status:true})
+            .populate('category')
+            .sort(sortCriteria)
+            .skip((page - 1) * ITEMS_IN_PAGE) // Skip the specified number of documents based on the current page
+            .limit(ITEMS_IN_PAGE);
+            
+            const totalProductsCount = await Products.countDocuments({status:true});
+
+            res.render('shop',{products,user,categories:category,msg:'fromhome',currentPage:page,totalPages: Math.ceil(totalProductsCount / ITEMS_IN_PAGE)})
+        }else{
+            if(end!=0){
+                const  products = await Products.aggregate([
+                    {
+                        $match:{
+                            "salesPrice" :{ $gte: start , $lte: end},
+                            "status":{$eq:true},
+                        }
+                    },
+                    {
+                        $sort: {
+                            "salesPrice": 1 // Sort by salePrice in ascending order
+                        }
+                    },
+                    {
+                        $skip: (page - 1) * ITEMS_IN_PAGE // Skip documents based on the current page
+                    },
+                    {
+                        $limit: ITEMS_IN_PAGE // Limit the number of documents retrieved per page
+                    }
+                ])
+                res.render('shop',{products,user,categories:category,msg:'fromhome',currentPage:page,totalPages: Math.ceil(products.length / ITEMS_IN_PAGE)})
+            }else {
+                var products = await Products.find({ salesPrice: { $gt: start }, status:true })
+                    .skip((page - 1) * ITEMS_IN_PAGE) 
+                    .limit(ITEMS_IN_PAGE); 
+                res.render('shop', {
+                    brands, products: products, user, category, msg: 'fromhome',
+                    currentPage: page,
+                   
+                    totalPages: Math.ceil(products.length / ITEMS_IN_PAGE)
+                })
+            }
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+    const loadProductDetails = async (req, res) => {
+        try {
+            const categories = await Category.find({});
+            const productId = req.query.id;
+            console.log(productId);
+            const products = await Products.findById(productId).populate('category')
+            const productIdObject = new mongoose.Types.ObjectId(productId);
+            const totalStock = await Products.aggregate([
+                {
+                    $match: {
+                        _id: productIdObject
+                    }
+                },
+                {
+                    $unwind: "$sizes"
+                },
+                {
+                    $group: {
+                        _id: null,
+                        totalStock: {
+                            $sum: {
+                                $add: [
+                                    "$sizes.s.quantity",
+                                    "$sizes.m.quantity",
+                                    "$sizes.l.quantity"
+                                ]
+                            }
+                        }
+                    }
+                }
+            ]);
+            
+            console.log(totalStock);
+            
+            
+            const user = await User.findById(req.session.user_id);
+            if(req.session.user_id){
+                if(productId){
+                res.render('productDetails', { products,user:user,totalStock,categories})
+                }else{
+                    res.redirect('/home')
+                }
+            }else{
+                res.render('productDetails',{products,user,totalStock,categories})
+            }
+            
+        } catch (error) {
+            // res.redirect('/error')
+            console.log(error.message);
+        }
+
+    }
 const addToCart = async (req, res) => {
     try {
         const userId = req.session.user_id;
@@ -305,7 +479,7 @@ const addToCart = async (req, res) => {
         const size = req.body.size;
         console.log(size+"adfsjbjdf");
         const productId = req.body.productId;
-
+        
         // Check if there is an existing cart for the user
         const existingCart = await Cart.findOne({ userId: userId });
 
@@ -346,8 +520,7 @@ const addToCart = async (req, res) => {
 
         res.redirect('/cart');
     } catch (error) {
-        console.log(error.message);
-        res.status(500).send("Internal server error");
+        res.redirect('/error')
     }
 };
 
@@ -359,18 +532,31 @@ const loadCart = async (req, res) => {
     try {
         const userId = req.session.user_id;
         const userData = await User.findById(userId);
+        const categories = await Category.find({})
+        const products = await Products.find({})
+        const sizeStock = 0;
         if (req.session.user_id) {
             const userId = req.session.user_id;
 
             // Assuming you have a function to fetch the cart for a specific user
             const userCart = await Cart.find({ userId: userId })
-                .populate('products.productId')
-            // Render the EJS template with the cart data
-            res.render('cart', { user: userData, cart: userCart });
+                .populate('products.productId').populate({
+                    path:'products.productId',
+                    populate:{
+                        path:'category',
+                        model:'Category'
+                    }
+                })
+            if(userData.is_verified==1){
+            res.render('cart', { user: userData,products, cart: userCart,sizeStock ,categories});
+            }else{
+                res.redirect('/login');
+            }
         } else {
             res.redirect('/login');
         }
     } catch (error) {
+        // res.redirect('/error')
         console.log(error.message);
     }
 };
@@ -382,26 +568,30 @@ const updateQuantity = async (req, res) => {
 
         // Assuming cartId is the _id of the cart
         let cart = await Cart.findById(cartId);
-
+        
         if (!cart) {
             return res.status(404).json({ message: "Cart not found" });
         }
        
 
-        cart.products.forEach((product) => {
-            console.log(product._id+'' == productId);
+        const cartProduct = cart.products.forEach((product) => {
+            
             if (product._id+'' == productId) {
                 product.quantity = newQuantity;
             }
         });
-        
+        // const size = cartProduct.size;
+        // const availableStock = product.sizes.find((sizeInfo) => sizeInfo[size].quantity);
+
+        // if (newQuantity > availableStock) {
+        //     return res.status(400).json({ message: "Exceeded available stock for the specific size" });
+        // }
 
         await cart.save();
 
         res.json({ message: "Quantity updated successfully" });
     } catch (error) {
-        console.log(error.message);
-        res.status(500).json({ message: "Internal Server Error" });
+        res.redirect('/error')
     }
 };
 
@@ -422,7 +612,7 @@ const removeCartItem = async (req, res) => {
 
         res.redirect('/cart');
     } catch (error) {
-        console.log(error.message);
+        res.redirect('/error')
     }
 }
 
@@ -430,7 +620,15 @@ const loadAddressForm = async (req,res)=>{
     try {
         res.render('addressform');
     } catch (error) {
-        console.log(error.message);
+        res.redirect('/error')
+    }
+}
+
+const loadWallet = async (req,res)=>{
+    try {
+        
+    } catch (error) {
+        res.redirect('/error')
     }
 }
 
@@ -473,7 +671,7 @@ const addAddress = async (req,res)=>{
 
 
     } catch (error) {
-        console.log(error.message);
+        res.redirect('/error')
     }
 }
 
@@ -481,14 +679,18 @@ const loadAccount = async(req,res)=>{
     try {
         const userId = req.session.user_id;
         const user = await User.findById(userId);
-        const category = await Category.find({})
+        const categories = await Category.find({})
         const cart = await Cart.find({ userId: userId }).populate('products.productId');
         const order = await Order.find({ userId: userId })
             .sort({ orderDate: -1 }) // Sort by orderDate in descending order for latest first
             .populate('products.productId');
-        res.render('account',{user,category,cart,order})
+            if(user.is_verified==1){
+        res.render('account',{user,categories,cart,order})
+            }else{
+                res.redirect('/login')
+            }
     } catch (error) {
-        console.log(error.message);
+        res.redirect('/error')
     }
 }
 
@@ -506,7 +708,7 @@ const loadEditAddress = async (req, res) => {
             res.render('editAddressForm', { user: user, i })
         }
     } catch (error) {
-        console.log(error.message);
+        res.redirect('/error')
     }
 }
 
@@ -535,7 +737,7 @@ const updateAddress = async(req,res)=>{
             res.redirect('/account');
         }
     } catch (error) {
-        console.log(error.message);
+        res.redirect('/error')
     }
 }
 
@@ -548,7 +750,6 @@ const uploadUserImage = async(req,res)=>{
         
         res.redirect('/account')
     } catch (error) {
-        console.log(error.message);
         res.redirect('/error')
     }
 }
@@ -563,6 +764,89 @@ const updateUser = async(req,res)=>{
         user.mobile = req.body.mobile;
         await user.save();
         res.redirect('/account');
+    } catch (error) {
+        res.redirect('/error')
+        }
+}
+
+const userError = async(req,res)=>{
+    try {
+        const msg= req.query.msg
+
+        if(msg){
+            res.render('error',{msg:true})
+        }else{
+            res.render('error',{msg:false})
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const loadWishlist = async(req,res)=>{
+    try {
+        const userId = req.session.user_id;
+        const userData = await User.findById(userId);
+        const categoryData = await Category.find({});
+
+        if(userId){
+            if(userData.is_verified==1){
+            const wishlist = await Wishlist.findOne({userId:userId}).populate('products.productId');
+            res.render('wishlist',{user:userData,category:categoryData,wishlist});
+            }else{
+                res.redirect('/login')
+            }
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const addToWishlist = async(req,res)=>{
+    try {
+        const userId = req.session.user_id;
+        const productId = req.query.productId;
+        const wishItem = {productId:productId};
+        const userWishlist = await Wishlist.findOne({userId:userId})
+        if (userWishlist && userWishlist.products.some(item => item.productId.toString() === productId.toString())) {
+
+
+
+            const user = await User.findById(req.session.user_id);
+            const categoryData = await Category.find({})
+            const productsData = await Products.find({}).populate('category')
+            const userCart = await Cart.findOne({ userId: userId }).populate('products.productId');
+            res.render('homePage', {  products: productsData, user: user, cart: userCart, category: categoryData, msg: '0' })
+           
+
+        } else {
+            const wishlist = await Wishlist.findOneAndUpdate(
+                { userId: userId },
+                { $push: { products: wishItem } },
+                { upsert: true, new: true }
+            );
+
+            res.redirect('/wishlist');
+        }
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+const removeWishlistProduct = async(req,res)=>{
+    try {
+        const productId = req.query.productId;
+        const userId = req.session.user_id;
+        const index = req.query.index;
+
+        const wishlist = await Wishlist.findOne({userId:userId});
+
+        if(index!==-1){
+            wishlist.products.splice(index, 1);
+            await wishlist.save();
+        }
+        res.redirect('/wishlist');
     } catch (error) {
         console.log(error.message);
     }
@@ -588,6 +872,9 @@ module.exports = {
     verifyLogin,
     loadHome,
     loadProductDetails,
+    searchResult,
+    pagination,
+    sorting,
     loadCart,
     addToCart,
     updateQuantity,
@@ -598,5 +885,10 @@ module.exports = {
     loadAccount,
     updateAddress,
     uploadUserImage,
-    updateUser
+    updateUser,
+    userError,
+    loadWishlist,
+    addToWishlist,
+    removeWishlistProduct,
+    loadWallet
 }

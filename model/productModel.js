@@ -10,6 +10,11 @@ const productSchema = new mongoose.Schema({
         type:String,
         required:true,
     },
+    category:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Category',
+        required:true,
+    },
     regularPrice:{
         type:String,
         required:true
@@ -22,26 +27,45 @@ const productSchema = new mongoose.Schema({
         type:Boolean,
         default:true
     },
-    totalStock:{
-        type:Number,
-        required:true
-    },
     images:[
         {
             type:String,
             required:true
         }
     ],
-    sizes:[{
-        size:{
-            type:mongoose.Schema.Types.Mixed,
-            required:true
+    sizes: [
+        {
+            
+            s: {
+                quantity: {
+                    type: Number,
+                    default: 0,
+                },
+            },
+            m: {
+                quantity: {
+                    type: Number,
+                    default: 0,
+                },
+            },
+            l: {
+                quantity: {
+                    type: Number,
+                    default: 0,
+                },
+            },
+        
         },
-        quantity:{
-            type:Number,
-            required:true
-        }
-}],
+    ],
+    date:{
+        type:Date,
+        default:Date.now()
+    },
+    discountedPrice:{
+        type:Number,
+        default:0
+    },
+    
 })
 
 module.exports=mongoose.model('Products',productSchema)

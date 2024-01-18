@@ -1,13 +1,13 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost:27017/E-commerce')
+mongoose.connect(process.env.MONGO_URL)
 const path = require('path');
 const express= require('express');
-const bodyParser = require('body-parser');
 const app= express();
 const config = require('../My project/config/config')
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended:true}))
+app.use(express.json())
+app.use(express.urlencoded({extended:true}))
 
 const session = require('express-session');
 app.use(session({

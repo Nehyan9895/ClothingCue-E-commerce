@@ -1,0 +1,289 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-transactions-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:33 GMT -->
+
+<head>
+    <meta charset="utf-8">
+    <title>CLOTHING CUE</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="/admin-assets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href="/admin-assets/css/main.css" rel="stylesheet" type="text/css" />
+
+
+
+</head>
+
+<body>
+    <div class="screen-overlay"></div>
+    <aside class="navbar-aside" id="offcanvas_aside">
+        <div class="aside-top">
+            <a href="index.html" class="brand-wrap">
+                <img src="/admin-assets/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
+            </a>
+            <div>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
+                </button>
+            </div>
+        </div>
+        <nav>
+            <ul class="menu-aside">
+                <li class="menu-item ">
+                    <a class="menu-link" href="home"> <i class="icon material-icons md-home"></i>
+                        <span class="text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="UsersList"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Users</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="orderList"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+
+                </li>
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="page-sellers-cards.html"> <i class="icon material-icons md-store"></i>
+                        <span class="text">Products</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="productList">Products List</a>
+                        <a href="addProduct">Add Products</a>
+                    </div>
+                </li>
+                <li class="menu-item  ">
+                    <a class="menu-link" href="category"> <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Categories</span>
+                    </a>
+                </li>
+                <li class="menu-item active">
+                    <a class="menu-link" href="salesReport"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Sales Report</span>
+                    </a>
+                </li>
+                <li class="menu-item    ">
+                    <a class="menu-link" href="coupon"> <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Coupon</span>
+                    </a>
+
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="banner"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Banner Management </span>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="page-brands.html"> <i class="icon material-icons md-stars"></i>
+                        <span class="text">Brands</span> </a>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" disabled href="#"> <i class="icon material-icons md-pie_chart"></i>
+                        <span class="text">Statistics</span>
+                    </a>
+                </li>
+            </ul>
+            <hr>
+            <ul class="menu-aside">
+                <li class="menu-item has-submenu">
+                    <a class="menu-link" href="#"> <i class="icon material-icons md-settings"></i>
+                        <span class="text">Settings</span>
+                    </a>
+                    <div class="submenu">
+                        <a href="page-settings-1.html">Setting sample 1</a>
+                        <a href="page-settings-2.html">Setting sample 2</a>
+                    </div>
+                </li>
+                <li class="menu-item">
+                    <a class="menu-link" href="page-blank.html"> <i class="icon material-icons md-local_offer"></i>
+                        <span class="text"> Starter page </span>
+                    </a>
+                </li>
+            </ul>
+            <br>
+            <br>
+        </nav>
+    </aside>
+    <main class="main-wrap">
+        <section class="content-main">
+            <div class="content-header">
+                <h2 class="content-title">Sales Report</h2>
+            </div>
+            <div class="card" id="PDF">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <header class="border-bottom mb-4 pb-4">
+                                <div class="row">
+
+
+                                    <div class="col-lg-9 col-12 d-flex justify-content-center ">
+                                        <form action="" class="print-hidden" method="post">
+                                            <label>Starting:</label>
+                                            <input required type="date" name="start">
+
+
+                                            <label>Ending:</label>
+                                            <input type="date" name="end">
+                                            <input required class="btn btn-primary" type="submit" value="Submit">
+                                        </form>
+
+                                    </div>
+                            </header>
+
+
+                            <!-- card-header end// -->
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Transaction ID</th>
+                                            <th>Paid</th>
+                                            <th>Method</th>
+                                            <th>Date</th>
+                                            <th class="text-end print-hidden"> Action </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% let online=0 %>
+                                            <% let fullAmount=0 %>
+                                                <% if (orders.length> 0) { %>
+                                                    <% for (let i=0; i < orders.length; i++) { %>
+                                                        <% if (orders[i].orderStatus==='Delivered' ) { %>
+                                                            <% if (orders[i].PaymentMethod=='online Payment' ) { online
+                                                                +=1 } %>
+
+                                                                <% const date=new Date(orders[i].orderDate) %>
+                                                                    <% const
+                                                                        formattedDate=date.toLocaleDateString('en-GB', {
+                                                                        day: '2-digit' , month: '2-digit' ,
+                                                                        year: 'numeric' }) %>
+
+                                                                        <% fullAmount
+                                                                            +=parseInt(orders[i].discountedAmount) %>
+                                                                            <tr>
+                                                                                <td><b>#<%= orders[i]._id %></b></td>
+                                                                                <td>₹<%= orders[i].discountedAmount %>
+                                                                                        .00</td>
+                                                                                <td>
+                                                                                    <div class="icontext">
+                                                                                        <!-- <img class="icon border" src="" alt="Payment"> -->
+                                                                                        <span
+                                                                                            class="text text-sm text-primary">
+                                                                                            <%= orders[i].PaymentMethod
+                                                                                                %>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                </td>
+                                                                                <td>
+                                                                                    <%= formattedDate %>
+                                                                                </td>
+                                                                                <td class="text-end print-hidden">
+                                                                                    <a href="orderdetails?orderId=<%= orders[i]._id %>"
+                                                                                        class="btn btn-sm btn-light font-sm rounded">Details</a>
+                                                                                </td>
+                                                                            </tr>
+                                                                            <% } %>
+                                                                                <% } %>
+                                                                                    <% } %>
+                                                                                        <style>
+                                                                                            @media print {
+                                                                                                .print-hidden {
+                                                                                                    display: none;
+                                                                                                }
+                                                                                            }
+                                                                                        </style>
+                                    </tbody>
+
+                                </table>
+                            </div> <!-- table-responsive.// -->
+                        </div> <!-- col end// -->
+                        <aside class="col-lg-3">
+                            <div class="box bg-light" style="min-height:80%">
+                                <h6 class="mt-15">Transaction Details</h6>
+                                <hr>
+                                <% if (typeof start !=='undefined' && typeof end !=='undefined' ) { %>
+                                    <h6 class="mb-0">From Date:</h6>
+                                    <p>
+                                        <%= start %>
+                                    </p><br>
+                                    <h6 class="mb-0">To Date:</h6>
+                                    <p>
+                                        <%= end %>
+                                    </p><br>
+                                    <% } else { %>
+                                        <h6 class="mb-0">From Date:</h6>
+                                        <p>Not specified</p><br>
+                                        <h6 class="mb-0">To Date:</h6>
+                                        <p>Not specified</p><br>
+                                        <% } %>
+
+
+                                            <h6 class="mb-0">Total Amount:</h6>
+                                            <p>₹<%=fullAmount%>.00</p><br>
+                                            <span>
+                                                <h6 class="mb-0">Total Orders:</h6>
+                                            </span>
+                                            <p>
+                                                <%=orders.length%>
+                                            </p><br>
+                                            <h6 class="mb-0">Total Online:</h6>
+                                            <p>
+                                                <%=online%>
+                                            </p><br>
+                                            <h6 class="mb-0">Email:</h6>
+                                            <p><template class="__cf_email__"
+                                                    data-cfemail="9cefe9ececf3eee8dcf9e4fdf1ecf0f9b2fff3f1">[email&#160;protected]</template>
+                                            </p><br>
+
+                                            <p>Total Payment:</p>
+                                            <p class="h4">₹<%=fullAmount%>.00</p>
+                                            <hr>
+                                            <button class="btn btn-lightb print-hidden" id="print">Download
+                                                Report</button>
+
+                            </div>
+
+
+                        </aside> <!-- col end// -->
+                    </div> <!-- row end// -->
+                </div> <!-- card-body // -->
+            </div> <!-- card end// -->
+
+        </section>
+    </main>
+    <script>
+        document
+            .getElementById('print')
+            .addEventListener('click', function () {
+                window.print();
+            });
+    </script>
+
+    </main>
+    <script src="/admin-assets/js/vendors/jquery-3.6.0.min.js"></script>
+    <script src="/admin-assets/js/vendors/bootstrap.bundle.min.js"></script>
+    <script src="/admin-assets/js/vendors/select2.min.js"></script>
+    <script src="/admin-assets/js/vendors/perfect-scrollbar.js"></script>
+    <script src="/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
+    <!-- Main Script -->
+    <script src="/admin-assets/js/main.js" type="text/javascript"></script>
+
+
+
+</body>
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-transactions-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:33 GMT -->
+
+</html>

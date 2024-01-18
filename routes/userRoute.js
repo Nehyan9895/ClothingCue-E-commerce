@@ -10,9 +10,8 @@ const upload = multer({ dest: 'uploads/' });
 user_route.set('view engine','ejs');
 user_route.set('views','./views/users');
 
-const bodyParser = require('body-parser')
-user_route.use(bodyParser.json());
-user_route.use(bodyParser.urlencoded({extended:true}))
+user_route.use(express.json());
+user_route.use(express.urlencoded({extended:true}))
 
 
 const user_controller = require('../controller/userController');
@@ -38,14 +37,16 @@ user_route.get('/logout',user_controller.userLogout);
 
 //for loading home page
 user_route.get('/home',auth.isLogin,user_controller.loadHome);
-user_route.get('/productDetails',user_controller.loadProductDetails);
-
+user_route.get('/productDetails',auth.isLogin,user_controller.loadProductDetails);
+user_route.get('/shop',user_controller.pagination)
+user_route.get('/sorting',user_controller.sorting)
+user_route.post('/',user_controller.searchResult);
 //for cart 
 user_route.get('/shopcart',auth.isLogin,auth.isBlocked,user_controller.loadCart)
 user_route.post('/addtocart',auth.isLogin,user_controller.addToCart)
-user_route.get('/cart',user_controller.loadCart);
-user_route.put('/updateQuantity',user_controller.updateQuantity);
-user_route.get('/removeCartItem',user_controller.removeCartItem);
+user_route.get('/cart',auth.isLogin,user_controller.loadCart);
+user_route.put('/updateQuantity',auth.isLogin,user_controller.updateQuantity);
+user_route.get('/removeCartItem',auth.isLogin,user_controller.removeCartItem);
 
 //accounts page
 user_route.get('/account',auth.isLogin,user_controller.loadAccount);
@@ -64,4 +65,17 @@ user_route.get('/checkout',auth.isLogin,order_controller.loadCheckout)
 user_route.post('/account',auth.isLogin,order_controller.placeOrder);
 user_route.get('/getorderdetails',auth.isLogin,order_controller.userOrderDetails)
 user_route.get('/usercancelorder',auth.isLogin,order_controller.userCancelOrder)
+user_route.post('/onlinepayment',auth.isLogin,order_controller.onlinePayment)
+user_route.get('/onlinepayment',auth.isLogin,order_controller.paymentResponce)
+user_route.get('/userreturnorder',auth.isLogin,order_controller.userReturnOrder)
+user_route.post('/applycoupon',auth.isLogin,order_controller.addCoupon);
+
+//for wishlist
+user_route.get('/wishlist',auth.isLogin,user_controller.loadWishlist);
+user_route.get('/addtowishlist',auth.isLogin,user_controller.addToWishlist)
+user_route.get('/removeitem-wishlist',auth.isLogin,user_controller.removeWishlistProduct)
+
+
+user_route.get('/error',user_controller.userError)
+
 module.exports = user_route;

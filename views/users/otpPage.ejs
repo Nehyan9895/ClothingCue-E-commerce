@@ -8,6 +8,7 @@
               <h2 class="text-center mb-4">OTP Verification</h2>
               
               <form id="form" method="post" action="/verify">
+                <input type="hidden" name="verificationCode" id="verificationCode" value="<%= verification  %>">
                   <div class="mb-3">
                       <label for="otp" class="form-label">Enter 4-digit OTP</label>
                       <input type="text" class="form-control" name="otp" id="otp" maxlength="4" pattern="\d{4}" required>
@@ -35,26 +36,111 @@
       </div>
   </div>
 </div>
-
 <script>
-    let timerSeconds = 60; // 1 minute
-    let timerInterval;
-
-    function startTimer() {
-        timerInterval = setInterval(function () {
-            if (timerSeconds > 0) {
-                document.getElementById('timer').innerText = `Resend in ${timerSeconds} seconds`;
-                timerSeconds--;
-            } else {
-                document.getElementById('timer').innerText = '';
-                clearInterval(timerInterval);
-                // Enable the "Resend OTP" button after the timer expires
-                document.getElementById('resendOtp').removeAttribute('disabled');
-            }
-        }, 1000);
+// Countdown generator function
+function* countdown(seconds) {
+    while (seconds > 0) {
+        yield seconds--;
     }
+}
 
-    document.getElementById('resendOtp').addEventListener('click', function () {
+// Initialize the generator with 60 seconds
+let timerGenerator = countdown(60);
+
+// Timer initialization and reset functions
+function startTimer() {
+    timerInterval = setInterval(function () {
+        const timerValue = timerGenerator.next().value;
+
+        if (timerValue !== undefined) {
+            document.getElementById('timer').innerText = `Resend in ${timerValue} seconds`;
+            // Clear the message when the timer starts
+            
+        } else {
+            document.getElementById('timer').innerText = '';
+            clearInterval(timerInterval);
+            // Enable the "Resend OTP" button after the timer expires
+            document.getElementById('resendOtp').removeAttribute('disabled');
+        }
+    }, 1000);
+}
+
+function resetTimer() {
+    timerGenerator = countdown(60); // Reset the generator with 60 seconds
+    startTimer();
+}
+
+// Form submission event listener
+// ... (existing code)
+
+// Form submission event listener
+// ... (existing code)
+
+// Form submission event listener
+document.getElementById('form').addEventListener('submit', function (event) {
+    event.preventDefault(); // Prevent the default form submission behavior
+
+    const verificationCode = document.getElementById('verificationCode').value.trim();
+    const otpInput = document.getElementById('otp');
+    const enteredOtp = otpInput.value;
+
+    // Add logic to validate the entered OTP, for example, checking length and pattern
+    if (enteredOtp === verificationCode) {
+        // If the OTP is valid, make an API call for verification
+        fetch('/verify', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ otp: enteredOtp }),
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return response.json(); // Assuming the server responds with JSON
+            } else {
+                return response.text(); // If not JSON, handle it as plain text
+            }
+        })
+        .then(data => {
+           
+                // Handle the response from the server if it's JSON
+                console.log('Server response:', data);
+                // If verification is successful, reset the timer
+                resetTimer();
+                document.getElementById('resendMessage').innerText = 'OTP verified successfully.';
+                setTimeout(() => {
+        window.location.href = '/home';
+    }, 2000);
+        })
+        .catch(error => {
+            // Handle other errors, e.g., show an error message to the user
+            console.error('Error verifying OTP:', error);
+            document.getElementById('resendMessage').innerText = 'Error verifying OTP. Please try again.';
+        });
+    } else {
+        // If the entered OTP is invalid, you can show an error message
+        document.getElementById('resendMessage').innerText = 'Invalid OTP. Please try again.';
+    }
+});
+
+// ... (existing code)
+
+
+
+// OTP input field event listener
+document.getElementById('otp').addEventListener('input', function (e) {
+    // Clear the error message when the user starts entering a new OTP
+    e.preventDefault();
+    document.getElementById('resendMessage').innerText = '';
+});
+
+// Resend OTP event listener
+document.getElementById('resendOtp').addEventListener('click', function () {
     this.setAttribute('disabled', true);
     fetch('/resendOtp', {
         method: 'GET',
@@ -75,8 +161,7 @@
     .then(data => {
         // Handle the response, update UI if needed
         console.log('OTP resent successfully', data);
-        timerSeconds = 60; // Reset the timer
-        startTimer();
+        resetTimer();
         document.getElementById('resendMessage').innerText = 'OTP resent successfully. Check your email.';
     })
     .catch(error => {
@@ -91,8 +176,15 @@
         }
     });
 });
+
+// Start the timer initially
 startTimer();
+
 </script>
+</body>
+</html>
+
+
 
 <!-- Bootstrap JS and Popper.js (required for Bootstrap) -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

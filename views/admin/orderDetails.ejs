@@ -120,7 +120,7 @@
                     
                     <li class="dropdown nav-item">
                        
-                            <a class="dropdown-item text-danger" href="logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
+                            <a class="dropdown-item text-danger" href="/admin/logout"><i class="material-icons md-exit_to_app"></i>Logout</a>
                         </div>
                     </li>
                 </ul>
@@ -253,6 +253,49 @@
                                                     <dl class="dlist">
                                                         <dt>Total Amount</dt>
                                                         <dd>₹<%= order.totalAmount %></dd>
+                                                    </dl>
+                                                    <dl class="dlist">
+                                                        <dt class="text-muted">Status:</dt>
+                                                        <dd>
+                                                            <%if(order.paymentStatus=='Success'){%>
+                                                                <span class="badge rounded-pill alert-success text-success"><%=order.paymentStatus%></span>
+                                                            <%}else{%>
+                                                                <span class="badge rounded-pill alert-danger text-danger"><%=order.paymentStatus%></span>
+                                                                <%}%>
+                                                        </dd>
+                                                    </dl>
+                                                </article>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th width="65%"></th>
+                                            <th width="35%" class="font-weight-bold">After Discount</th>
+                                            
+                                        </tr>
+                                        <tr>
+                                            
+                                            <td colspan="4">
+                                                <article class="float-end">
+                                                    
+                                                    <dl class="dlist">
+                                                        <dt>Subtotal:</dt>
+                                                        <dd>₹<%=order.totalAmount%></dd>
+                                                    </dl>
+                                                    <dl class="dlist">
+                                                        <dt>Shipping cost:</dt>
+                                                        <dd>₹0.00</dd>
+                                                    </dl>
+                                                    <dl class="dlist">
+                                                        <dt>Applied Coupon:</dt>
+                                                        <dd><%=order.appliedcoupon%></dd>
+                                                    </dl>
+                                                    <dl class="dlist">
+                                                        <dt>Discount:</dt>
+                                                        <dd>₹<%=order.discount%>.00</dd>
+                                                    </dl>
+                                                    <dl class="dlist">
+                                                        <dt>Grand total:</dt>
+                                                        <dd> <b class="h5">₹<%=order.discountedAmount%></b> </dd>
                                                     </dl>
                                                     <dl class="dlist">
                                                         <dt class="text-muted">Status:</dt>

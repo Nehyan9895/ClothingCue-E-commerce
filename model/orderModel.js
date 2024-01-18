@@ -42,7 +42,7 @@ const orderSchema = new mongoose.Schema({
     },
     orderDate: {
         type: Date,
-        required: true
+        default:Date.now()
     },
     orderStatus: {
         type: String,
@@ -73,6 +73,22 @@ const orderSchema = new mongoose.Schema({
     orderID: {
         type: String
     },
+    razorId:{
+        type:String
+    },
+    discount:{
+        type:Number,
+        default:0
+    },
+    appliedcoupon:{
+        type:String
+    },
+    discountedAmount:{
+        type:Number,
+        default:function(){
+            return this.totalAmount;
+        }
+    }
 })
 
 module.exports = mongoose.model('Order', orderSchema)

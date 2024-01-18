@@ -28,83 +28,55 @@
                 <img src="/admin-assets/imgs/theme/logo.svg" class="logo" alt="Evara Dashboard">
             </a>
             <div>
-                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i>
-                </button>
+                <button class="btn btn-icon btn-aside-minimize"> <i class="text-muted material-icons md-menu_open"></i> </button>
             </div>
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item">
-                    <a class="menu-link" href="index.html"> <i class="icon material-icons md-home"></i>
+                <li class="menu-item ">
+                    <a class="menu-link" href="home"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-products-list.html"> <i
-                            class="icon material-icons md-shopping_bag"></i>
+                <li class="menu-item ">
+                    <a class="menu-link" href="UsersList"> <i class="icon material-icons md-person"></i>
+                        <span class="text">Users</span>
+                    </a>
+                </li>
+                <li class="menu-item ">
+                    <a class="menu-link" href="orderList"> <i class="icon material-icons md-shopping_cart"></i>
+                        <span class="text">Orders</span>
+                    </a>
+                   
+                </li>
+                <li class="menu-item has-submenu active">
+                    <a class="menu-link" href="page-sellers-cards.html"> <i class="icon material-icons md-store"></i>
                         <span class="text">Products</span>
                     </a>
                     <div class="submenu">
-                        <a href="page-products-list.html">Product List</a>
-                        <a href="page-products-grid.html">Product grid</a>
-                        <a href="page-products-grid-2.html">Product grid 2</a>
-                        <a href="page-categories.html">Categories</a>
+                        <a href="productList">Products List</a>
+                        <a href="addProduct">Add Products</a>
                     </div>
                 </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-orders-1.html"> <i class="icon material-icons md-shopping_cart"></i>
-                        <span class="text">Orders</span>
+                <li class="menu-item  ">
+                    <a class="menu-link" href="category"> <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Categories</span>
                     </a>
-                    <div class="submenu">
-                        <a href="page-orders-1.html">Order list 1</a>
-                        <a href="page-orders-2.html">Order list 2</a>
-                        <a href="page-orders-detail.html">Order detail</a>
-                    </div>
                 </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-sellers-cards.html"> <i class="icon material-icons md-store"></i>
-                        <span class="text">Sellers</span>
+                <li class="menu-item ">
+                    <a class="menu-link" href="salesReport"> <i class="icon material-icons md-add_box"></i>
+                        <span class="text">Sales Report</span>
                     </a>
-                    <div class="submenu">
-                        <a href="page-sellers-cards.html">Sellers cards</a>
-                        <a href="page-sellers-list.html">Sellers list</a>
-                        <a href="page-seller-detail.html">Seller profile</a>
-                    </div>
                 </li>
-                <li class="menu-item has-submenu active">
-                    <a class="menu-link" href="page-form-product-1.html"> <i class="icon material-icons md-add_box"></i>
-                        <span class="text">Add product</span>
+                <li class="menu-item    ">
+                    <a class="menu-link" href="coupon"> <i class="icon material-icons md-monetization_on"></i>
+                        <span class="text">Coupon</span>
                     </a>
-                    <div class="submenu">
-                        <a href="page-form-product-1.html">Add product 1</a>
-                        <a href="page-form-product-2.html" class="active">Add product 2</a>
-                        <a href="page-form-product-3.html">Add product 3</a>
-                        <a href="page-form-product-4.html">Add product 4</a>
-                    </div>
+                    
                 </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="page-transactions-1.html"> <i
-                            class="icon material-icons md-monetization_on"></i>
-                        <span class="text">Transactions</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="page-transactions-1.html">Transaction 1</a>
-                        <a href="page-transactions-2.html">Transaction 2</a>
-                    </div>
-                </li>
-                <li class="menu-item has-submenu">
-                    <a class="menu-link" href="#"> <i class="icon material-icons md-person"></i>
-                        <span class="text">Account</span>
-                    </a>
-                    <div class="submenu">
-                        <a href="page-account-login.html">User login</a>
-                        <a href="page-account-register.html">User registration</a>
-                        <a href="page-error-404.html">Error 404</a>
-                    </div>
-                </li>
-                <li class="menu-item">
-                    <a class="menu-link" href="page-reviews.html"> <i class="icon material-icons md-comment"></i>
-                        <span class="text">Reviews</span>
+                <li class="menu-item ">
+                    <a class="menu-link" href="banner"> <i class="icon material-icons md-comment"></i>
+                        <span class="text">Banner Management </span>
                     </a>
                 </li>
                 <li class="menu-item">
@@ -213,14 +185,14 @@
             <div class="row">
                 <div class="col-6">
                     <div class="content-header">
-                        <h2 class="content-title">Add New Product</h2>
+                        <h2 class="content-title">Edit Product</h2>
 
                     </div>
                 </div>
             </div>
             <form action="" method="post" id="form" enctype="multipart/form-data">
                 <div class="row">
-                    <div class="col-lg-6">
+                    <div class="col-lg-12">
                         <div class="card mb-4">
                             <div class="card-body">
                                 <div class="row">
@@ -230,40 +202,31 @@
                                     <div class="col-md-9">
                                         <div class="mb-4">
                                             <label class="form-label">Product title</label>
-                                            <input type="text" name="name" id="name" value="<%=products.name%>"
-                                                placeholder="Type here" class="form-control">
+                                            <input type="text" required name="name" id="name" value="<%=products.name%>" placeholder="Type here"
+                                                class="form-control">
                                         </div>
                                         <div class="mb-4">
                                             <label class="form-label">Description</label>
-                                            <textarea name="description" id="description" placeholder="Type here"
-                                                class="form-control" rows="4"><%=products.description%></textarea>
+                                            <textarea name="description" required id="description"
+                                                placeholder="Type here" class="form-control" rows="4"><%=products.description%></textarea>
                                         </div>
-                                    </div> <!-- col.// -->
-                                </div> <!-- row.// -->
-                                <hr class="mb-4 mt-0">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <h6>2. Pricing</h6>
-                                    </div>
-                                    <div class="col-md-9">
                                         <div class="mb-4">
                                             <label class="form-label">Regular Price</label>
-                                            <input type="text" id="regularPrice" name="regularPrice"
-                                                value="<%=products.regularPrice%>" placeholder="₹00.00"
-                                                class="form-control">
+                                            <input type="number" id="regularPrice" name="regularPrice"
+                                                placeholder="₹00.00" value="<%=products.regularPrice%>" class="form-control">
+                                            <span class="error-message" id="regularPriceError"></span>
                                         </div>
-                                    </div>
-                                    <div class="col-md-9">
                                         <div class="mb-4">
                                             <label class="form-label">Sale Price</label>
-                                            <input type="text" id="salesPrice" name="salesPrice" placeholder="₹00.00"
-                                                value="<%=products.salesPrice%>" class="form-control">
+                                            <input type="number" id="salesPrice" value="<%=products.salesPrice%>" name="salesPrice" placeholder="₹00.00"
+                                                class="form-control">
+                                            <span class="error-message" id="salesPriceError"></span>
                                         </div>
                                     </div> <!-- col.// -->
-                                </div> <!-- row.// -->
-                                <input type="hidden" name="id" value="<%= products._id %>">
 
-                                <hr class="mb-4 mt-0">
+                                    <hr class="mb-4 mt-0">
+                                </div> <!-- row.// -->
+
                                 <div class="row">
                                     <div class="col-md-3">
                                         <h6>3. Category</h6>
@@ -272,92 +235,59 @@
                                         <div class="mb-4">
                                             <% for (let i=0; i < categories.length; i++) { %>
                                                 <label class="mb-2 form-check form-check-inline" style="width: 45%;">
-                                                    <input class="form-check-input" name="mycategory" type="radio"
-                                                        value="<%= categories[i]._id %>">
+                                                    <input 
+                                                        class="form-check-input" 
+                                                        name="category" 
+                                                        type="radio"
+                                                        value="<%= categories[i]._id %>"
+                                                        <% if (categories[i]._id.toString() === products.category.toString()) { %>checked<% } %>
+                                                    >
                                                     <span class="form-check-label">
                                                         <%= categories[i].name %>
                                                     </span>
                                                 </label>
-                                                <% } %>
+                                            <% } %>
                                         </div>
+                                        
 
                                     </div> <!-- col.// -->
                                 </div> <!-- row.// -->
                                 <hr class="mb-4 mt-0">
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <h6>4. Media</h6>
+                                        <h6>Media</h6>
                                     </div>
                                     <div class="col-md-9">
                                         <div class="mb-4">
                                             <label class="form-label">Images</label>
-                                            <input class="form-control" name="images" value="<%=products.images%>"
-                                                id="images" type="file" multiple accept="image/*">
+                                            <input required class="form-control" name="images" id="images" type="file"
+                                                multiple accept="image/*">
                                         </div>
                                     </div> <!-- col.// -->
                                 </div> <!-- .row end// -->
-
                                 <div class="row">
                                     <div class="col-md-3">
-                                        <h6>5. Stock</h6>
+                                        <h6>Size and Quantity</h6>
                                     </div>
                                     <div class="col-md-9">
                                         <div class="mb-4">
-                                            <label class="form-label">Stock</label>
-                                            <input class="form-control" name="totalStock"
-                                                value="<%=products.totalStock%>" id="totalStock" type="number">
+                                            <label class="form-label">Small Size Quantity</label>
+                                            <input type="number" name="sizes[quantity][s]" min="0" value="<%= products.sizes[0].s.quantity %>" required placeholder="Quantity" class="form-control">
+                                            <span class="error-message" id="quantityErrorS"></span>
                                         </div>
-                                    </div> <!-- col.// -->
-                                </div> <!-- .row end// -->
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <h6>6. Size and Quantity</h6>
+                                        <div class="mb-4">
+                                            <label class="form-label">Medium Size Quantity</label>
+                                            <input type="number" name="sizes[quantity][m]" min="0" value="<%= products.sizes[0].m.quantity %>" required placeholder="Quantity" class="form-control">
+                                            <span class="error-message" id="quantityErrorM"></span>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label class="form-label">Large Size Quantity</label>
+                                            <input type="number" name="sizes[quantity][l]" min="0" value="<%= products.sizes[0].l.quantity %>" required placeholder="Quantity" class="form-control">
+                                            <span class="error-message" id="quantityErrorL"></span>
+                                        </div>
+                                        
+                                              
                                     </div>
-                                    <div class="col-md-9">
-                                        <% if (products.sizes && products.sizes.length> 0) { %>
-                                            <% for (let i=0; i < products.sizes.length; i++) { %>
-                                                <div class="mb-4">
-                                                    <label class="form-label">Sizes</label>
-                                                    <div id="sizeInputs">
-                                                        <div class="size-input">
-                                                            <input type="text" name="sizes[0][size]"
-                                                                placeholder="Size" class="form-control">
-                                                            <span class="error-message" id="sizeError0"></span>
-                                                        </div>
-                                                    </div>
-                                                    <button type="button" onclick="addSizeInput()">Add Size</button>
-                                                   
-                                </div>
-                                                </div>
-                                                <div class="mb-4">
-                                                    <label class="form-label">Quantity</label>
-                                                    <input type="number" name="sizes[<%= i %>][quantity]"
-                                                        value="<%=products.sizes[i].quantity%>" placeholder="Quantity"
-                                                        class="form-control">
-                                                </div>
-                                                <% } %>
-                                                    <% } else { %>
-                                                        <!-- Default size input -->
-                                                        <div class="mb-4">
-                                                            <label class="form-label">Sizes</label>
-                                                            <div id="sizeInputs">
-                                                                <div class="size-input">
-                                                                    <input type="text" name="sizes[0][size]"
-                                                                        placeholder="Size" class="form-control">
-                                                                    <span class="error-message" id="sizeError0"></span>
-                                                                </div>
-                                                            </div>
-                                                            <button type="button" onclick="addSizeInput()">Add
-                                                                Size</button>
-
-                                                        </div>
-                                    </div>
-                                    <div class="mb-4">
-                                        <label class="form-label">Quantity</label>
-                                        <input type="number" name="sizes[0][quantity]" placeholder="Quantity"
-                                            class="form-control">
-                                    </div>
-                                    <% } %>
                                 </div>
 
                             </div>
@@ -367,9 +297,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6">
+                <div class="col-lg-12">
                     <div class="mb-4">
-                        <h6>5. Images Preview</h6>
+                        <h6>Images Preview</h6>
                         <div id="image-preview-container" class="d-flex flex-wrap"></div>
                     </div>
                 </div>
@@ -484,7 +414,7 @@
             if (isNaN(regularPrice) || regularPrice <= 0) {
                 alert('Regular price must be a valid positive number.');
                 document.getElementById('regularPrice').value = '';
-            } else if (regularPrice >= salesPrice) {
+            } else if (regularPrice > salesPrice) {
                 alert('Sales Price must be higher than regular price.')
                 document.getElementById('regularPrice').value = '';
             }
@@ -501,7 +431,7 @@
             if (isNaN(salesPrice) || salesPrice <= 0) {
                 alert('Regular price must be a valid positive number.');
                 document.getElementById('salesPrice').value = '';
-            } else if (regularPrice >= salesPrice) {
+            } else if (regularPrice > salesPrice) {
                 alert('Sales Price must be higher than regular Price.');
                 document.getElementById('salesPrice').value = '';
             }
