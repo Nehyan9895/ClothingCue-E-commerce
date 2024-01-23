@@ -4,7 +4,7 @@ mongoose.connect(process.env.MONGO_URL)
 const path = require('path');
 const express= require('express');
 const app= express();
-const config = require('../My project/config/config')
+const config = require('./config/config')
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))

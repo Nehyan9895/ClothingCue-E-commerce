@@ -186,7 +186,7 @@
     <main class="main-wrap">
         <section class="content-main">
             <div class="content-header">
-                <h2 class="content-title">Sales Report</h2>
+                <h2 class="content-title">Wallet history</h2>
             </div>
             <div class="card" id="PDF">
                 <div class="card-body">
@@ -196,38 +196,44 @@
                                 <div class="row">
 
 
-                                    <div class="col-lg-9 col-12 d-flex justify-content-center ">
-                                        <form action="" class="print-hidden" method="post">
-                                            <label>Starting:</label>
-                                            <input required type="date" name="start">
-
-
-                                            <label>Ending:</label>
-                                            <input type="date" name="end">
-                                            <input required class="btn btn-primary" type="submit" value="Submit">
-                                        </form>
-
-                                    </div>
+                                   
                             </header>
 
 
                             <!-- card-header end// -->
                             <div class="table-responsive">
-                                <table class="table table-hover">
+                                <table>
                                     <thead>
-                                        <tr>
-                                            <th>Transaction ID</th>
-                                            <th>Paid</th>
-                                            <th>Method</th>
-                                            <th>Date</th>
-                                            <th class="text-end print-hidden"> Action </th>
-                                        </tr>
+                                      <tr>
+                                        <th>Transaction type</th>
+                                        <th>Amount</th>
+                                        <th>Description</th>
+                                        <th>Date</th>
+                                        <th class="text-end print-hidden">Balance</th>
+                                      </tr>
                                     </thead>
                                     <tbody>
-                                        
-                                    </tbody>
-
-                                </table>
+                                        <% if (wallet && wallet.transactions && wallet.transactions.length > 0) { %>
+                                          <% wallet.transactions.forEach(transaction => { %>
+                                            <tr>
+                                              <td><%= transaction.type %></td>
+                                              <td><%= transaction.amount %></td>
+                                              <td><%= transaction.description %></td>
+                                              <td><%= transaction.date.toISOString().split('T')[0] %></td>
+                                              <td class="text-end print-hidden">
+                                                <%= calculateBalance(transaction) %>
+                                              </td>
+                                            </tr>
+                                          <% }); %>
+                                        <% } else { %>
+                                          <tr>
+                                            <td colspan="5" class="text-center">No transactions available</td>
+                                          </tr>
+                                        <% } %>
+                                      </tbody>
+                                      
+                                      
+                                  </table>
                             </div> <!-- table-responsive.// -->
                         </div> <!-- col end// -->
                                            </div> <!-- row end// -->

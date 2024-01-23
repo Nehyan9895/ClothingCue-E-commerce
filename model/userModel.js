@@ -26,8 +26,9 @@ const userSchema = new mongoose.Schema({
         default:0
     },
     wallet:{
-        type : Number,
-        default:0,
+        type : mongoose.Schema.Types.ObjectId,
+        ref:'Wallet',
+        default:null
     },
     address:[{
         addressName:{type:String},

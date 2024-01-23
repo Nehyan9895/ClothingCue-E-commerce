@@ -74,6 +74,7 @@ user_route.post('/applycoupon',auth.isLogin,order_controller.addCoupon);
 user_route.get('/wishlist',auth.isLogin,user_controller.loadWishlist);
 user_route.get('/addtowishlist',auth.isLogin,user_controller.addToWishlist)
 user_route.get('/removeitem-wishlist',auth.isLogin,user_controller.removeWishlistProduct)
+user_route.get('/wallet',auth.isLogin,user_controller.loadWallet);
 
 
 user_route.get('/error',user_controller.userError)

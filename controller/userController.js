@@ -10,6 +10,7 @@ const Category = require('../model/categoryModel')
 const Order = require('../model/orderModel');
 const Wishlist = require('../model/wishlistModel');
 const Banner = require('../model/bannerModel')
+const Wallet = require('../model/walletModel');
 const ITEMS_IN_PAGE = 12;
 const otpStore = {};
 function sendVerificationCode(email, req, res) {
@@ -302,13 +303,10 @@ const loadHome = async (req, res) => {
             }
         ]);
         
-        console.log(totalStock);
+        
 
-        if(userData.is_verified==1){
+        
         res.render('homePage', { user: userData, products: productData,banners,categories:category,totalStock });
-        }else{
-            res.redirect('/login');
-        }
     } catch (error) {
         res.redirect('/error')
     }
@@ -624,13 +622,24 @@ const loadAddressForm = async (req,res)=>{
     }
 }
 
-const loadWallet = async (req,res)=>{
+const loadWallet = async (req, res) => {
     try {
-        
+        const userId = req.session.user_id;
+        const user = await User.findById(userId);
+        let wallet = await Wallet.findOne({ user: userId });
+
+        if (!wallet) {
+            wallet = await Wallet.create({ user: userId });
+        }
+
+        const categories = await Category.find({});
+        res.render('wallet', { wallet, category:categories,user });
     } catch (error) {
-        res.redirect('/error')
+        console.log(error.message);
+        res.status(500).send('Internal Server Error');
     }
-}
+};
+
 
 const addAddress = async (req,res)=>{
     try {
@@ -848,7 +857,7 @@ const removeWishlistProduct = async(req,res)=>{
         }
         res.redirect('/wishlist');
     } catch (error) {
-        console.log(error.message);
+        res.redirect('/error')
     }
 }
 
