@@ -260,8 +260,9 @@
                                     <div class="col-md-9">
                                         <div class="mb-4">
                                             <label class="form-label">Images</label>
-                                            <input required class="form-control" name="images" id="images" type="file"
-                                                multiple accept="image/*">
+                                            <input required class="form-control"  name="images" id="images" type="file" multiple accept="image/*">
+                                            
+                                                
                                         </div>
                                     </div> <!-- col.// -->
                                 </div> <!-- .row end// -->
@@ -300,9 +301,14 @@
                 <div class="col-lg-12">
                     <div class="mb-4">
                         <h6>Images Preview</h6>
-                        <div id="image-preview-container" class="d-flex flex-wrap"></div>
+                        <div id="image-preview-container" class="d-flex flex-wrap">
+                            <% products.images.forEach(image => { %>
+                                <img src="/<%= image %>" alt="Product Image" style="max-width: 100px; width: 100%;">
+                            <% }); %>
+                        </div>
                     </div>
                 </div>
+                
                 </div>
             </form>
             </div>

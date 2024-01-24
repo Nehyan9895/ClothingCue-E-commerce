@@ -191,6 +191,7 @@ const userOrderDetails = async (req, res) => {
 
 const loadOrderList = async (req, res) => {
     try {
+        
         const orders = await Order.find({}).sort({ orderDate: -1 }).populate('userId')
 
 

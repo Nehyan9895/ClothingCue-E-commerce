@@ -173,8 +173,8 @@
                                 <tr>
                                     <td><%= formattedDate %></td>
                                     <td><%=orders[i].orderID%></td>
-                                    <td><b><%=orders[i].userId.name%></b></td>
-                                    <td><%=orders[i].userId.mobile%></td>
+                                    <td><b><%=orders[i].userId?.name%></b></td>
+                                    <td><%=orders[i].userId?.mobile%></td>
                                     <td>₹<%=orders[i].totalAmount%></td>
                                     <%if(orders[i].orderStatus=='Order Placed'|| orders[i].orderStatus=='Delivered' || orders[i].orderStatus=='Shipped' ){%>
                                     <td><span class="badge rounded-pill alert-success"><%=orders[i].orderStatus%></span></td>
