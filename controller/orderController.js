@@ -166,7 +166,7 @@ const placeOrder = async (req, res) => {
         const category = await Category.find({});
         const cart = await Cart.find({ userId: userId }).populate('products.productId');
         const order = await Order.find({ userId: userId }).populate('products.productId').sort({ orderDate: -1 });
-        res.render('account', { user, categories, cart, order, msg: true });
+        res.render('account', { user, categories:category, cart, order, msg: true });
     } catch (error) {
         console.log(error.message);
     }
@@ -191,7 +191,7 @@ const userOrderDetails = async (req, res) => {
 
 const loadOrderList = async (req, res) => {
     try {
-        
+
         const orders = await Order.find({}).sort({ orderDate: -1 }).populate('userId')
 
 
