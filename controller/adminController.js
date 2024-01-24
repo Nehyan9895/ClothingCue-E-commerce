@@ -4,6 +4,7 @@ const Products = require('../model/productModel')
 const Order = require('../model/orderModel');
 const Coupon = require('../model/couponModel');
 const Banner = require('../model/bannerModel')
+const sharp = require('sharp');
 // const Variant = require('../model/variantModel')
 
 
