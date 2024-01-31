@@ -37,6 +37,8 @@ const loadCheckout = async (req, res) => {
         });
 
         const user = await User.findById(userId)
+        const wallet = await Wallet.find({user:userId})
+        console.log(wallet[0].balance);
         const productsData = await Product.find({})
         const categoryData = await Category.find({})
         const userCart = await Cart.find({ userId: userId }).populate('products.productId');
@@ -54,7 +56,7 @@ const loadCheckout = async (req, res) => {
 
         // Sort eligible coupons based on total amount in ascending order
         eligibleCoupons.sort((a, b) => a.minimumAmount - b.minimumAmount);
-        res.render('checkout', { products: productsData, user: user, cart: userCart, category: categoryData, coupons: eligibleCoupons, msg: '1', afterDiscount, discount, couponCode, totalAmount })
+        res.render('checkout', { products: productsData, user: user, cart: userCart, category: categoryData, coupons: eligibleCoupons, msg: '1', afterDiscount, discount, couponCode, totalAmount,wallet})
 
     } catch (error) {
         // res.redirect('/error')
@@ -68,7 +70,7 @@ const placeOrder = async (req, res) => {
         const addressIndex = req.body.selectedAddress;
         const total = req.body.totalAmount;
         const userId = req.session.user_id;
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).populate('wallet');
         const couponCode = req.body.couponCode;
         const discount = req.body.discount;
         const total2 = req.body.afterdiscount;
@@ -158,11 +160,19 @@ const placeOrder = async (req, res) => {
         });
 
         await newOrder.save();
-        await Cart.deleteMany({ userId: userId });
-        if (wallet == 'wallet') {
-            user.wallet = user.wallet - total2
-            await user.save();
-        }
+        const wallets = await Wallet.findOne({ user: userId });
+
+if (wallets && wallet === 'wallet') {
+    wallets.transcactions.push({
+        amount: total2,
+        type: 'debit',
+        description: `Spend for order ${orderId}`,
+    });
+    wallets.balance -= total2;
+    await wallets.save();
+    
+}
+
         const category = await Category.find({});
         const cart = await Cart.find({ userId: userId }).populate('products.productId');
         const order = await Order.find({ userId: userId }).populate('products.productId').sort({ orderDate: -1 });
@@ -226,7 +236,7 @@ const userCancelOrder = async (req, res) => {
                 type: 'credit',
                 description: `Refund for order ${order.orderID}`,
             });
-    
+            wallet.balance+=order.discountedAmount;
             await wallet.save();
     
             order.paymentStatus = 'Refunded';
@@ -308,7 +318,7 @@ const cancelOrder = async (req, res) => {
                 type: 'credit',
                 description: `Refund for order ${order.orderID}`,
             });
-    
+            wallet.balance=wallet.balance+order.discountedAmount;
             await wallet.save();
     
             order.paymentStatus = 'Refunded';
@@ -354,7 +364,7 @@ const userReturnOrder = async (req, res) => {
                 type: 'credit',
                 description: `Refund for order ${order.orderID}`,
             });
-    
+            wallet.balance=wallet.balance+order.discountedAmount;
             await wallet.save();
     
             order.paymentStatus = 'Refunded';

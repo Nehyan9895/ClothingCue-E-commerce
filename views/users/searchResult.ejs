@@ -93,6 +93,7 @@
                         <div class="search-style-2">
                             <form action="/" method="post">
                                 <select name="cat" class="select-active">
+                                    <option value="all">All Categories</option>
                                 <%for(let i=0;i<category.length;i++){%>
                                     <%if(category[i].status){%>
                                     <option value="<%=category[i]._id%>"><%=category[i].name%></option>  
@@ -116,6 +117,11 @@
                                     </a>
                                     
                                 </div>
+                                <div class="header-action-icon-2">
+                                    <a href="/wallet">
+                                        <img src="assets/imgs/theme/icons/icon-wallet.svg" alt="Wallet">
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -133,13 +139,13 @@
                         <div class="main-menu main-menu-padding-1 main-menu-lh-2 d-none d-lg-block ps-5 ms-5">
                             <nav class="ps-5 ms-5">
                                 <ul>
-                                    <li><a class="active" href="index.html">Home </a>
+                                    <li><a  href="index.html">Home </a>
                                        
                                     </li>
                                     <li>
                                         <a href="page-about.html">About</a>
                                     </li>
-                                    <li><a href="/shop">Shop </a>
+                                    <li><a class="active" href="/shop">Shop </a>
                                        
                                     </li>
                                     <li class="position-static"><a href="#">Mega menu </a>
@@ -310,8 +316,13 @@
                     <div class="col-lg-12">
                         <div class="shop-product-fillter">
                             <div class="totall-product">
-                                <p> We found <strong class="text-brand"><%=products.length%></strong> items for you!</p>
+                                <%
+                                const filteredProducts = products.filter(product => product.status === true);
+                                const numberOfProducts = filteredProducts.length;
+                                %>
+                                <p>We found <strong class="text-brand"><%= numberOfProducts %></strong> items for you!</p>
                             </div>
+                            
                             <div class="sort-by-product-area">
                                 <div class="sort-by-cover mr-10">
                                     <div class="sort-by-product-wrap">
@@ -319,26 +330,22 @@
                                             <span><i class="fi-rs-apps"></i>Show:</span>
                                         </div>
                                         <div class="sort-by-dropdown-wrap">
-                                            <span>Low to High<i class="fi-rs-angle-small-down"></i></span>
+                                            <span>₹0-₹4000<i class="fi-rs-angle-small-down"></i></span>
                                         </div>
                                     </div>
                                     <div class="sort-by-dropdown">
+                                        <ul class="categories">
+                                            <li><a href="/sorting?start=0&end=4000">₹0-₹4000</a></li>
+                                            <li><a href="/sorting?start=4000&end=6000">₹4000-₹6000</a></li>
+                                            <li><a href="/sorting?start=6000&end=8000">₹6000-₹8000</a></li>
+                                            <li><a href="/sorting?start=8000&end=10000">₹8000-₹10000</a></li>
+                                            <li><a href="/sorting?start=10000&end=0">10000₹+</a></li>
+                                        </ul>
                                         <ul>
-                                             <%if(msg=='fromhome'){%>
-                                                <li><a href="/sorting?by=1">Price: Low to High</a></li>
-                                                <li><a href="/sorting?by=-1">Price: High to Low</a></li>
-                                             <%}else if(msg=='fromcat'){%>
-                                                <li><a href="/categorysearch?catId=<%= products.length > 0 ?products[0].category: '' %>&by=1">Price: Low to High</a></li>
-                                                <li><a href="/categorysearch?catId=<%= products.length > 0 ? products[0].category : '' %>&by=-1">Price: High to Low</a></li>
+                                                                                         
+                                            <li><a href="/categorysearch?catId=<%= products.length > 0 ?products[0].category: '' %>&by=1">Price: Low to High</a></li>
+                                            <li><a href="/categorysearch?catId=<%= products.length > 0 ? products[0].category : '' %>&by=-1">Price: High to Low</a></li>
 
-                                                <%}else if(msg=='frombrand'){%>
-                                                    <li><a href="/brandsearch?brand=<%= products.length > 0 ? products[0].Brand : '' %>&by=1">Price: Low to High</a></li>
-                                                    <li><a href="/brandsearch?brand=<%= products.length > 0 ? products[0].Brand : '' %>&by=-1">Price: High to Low</a></li>
-
-                                                    <%}else{%>
-                                                        <li><a href="/searchsort?searchTerm=<%= products.length > 0 ? msg : '' %>&by=1&cat=<%= products.length > 0 ? products[0].category : '' %>">Price: Low to High</a></li>
-                                                        <li><a href="/searchsort?searchTerm=<%= products.length > 0 ? msg: '' %>&by=-1&cat=<%= products.length > 0 ? products[0].category : '' %>">Price: High to Low</a></li>
-                                                        <%}%>
                                         </ul>
                                     </div>
                                 </div>

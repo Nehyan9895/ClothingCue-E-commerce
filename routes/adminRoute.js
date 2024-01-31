@@ -46,6 +46,7 @@ admin_route.post('/addProduct',adminAuth.isLogin,upload.array('images',5),admin_
 
 admin_route.get('/blockProduct',adminAuth.isLogin,admin_controller.blockProduct);
 admin_route.get('/editProduct',adminAuth.isLogin,admin_controller.editProductLoad)
+admin_route.delete('/deleteImage/:productId/:imageIndex',adminAuth.isLogin,admin_controller.deleteImage)
 
 admin_route.post('/editProduct',adminAuth.isLogin,upload.array('images',5),admin_controller.editProduct)
 admin_route.get('/orderlist',adminAuth.isLogin,order_controller.loadOrderList);

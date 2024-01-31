@@ -137,7 +137,7 @@
                                             </td>
                                             <td> ₹<%=order.products[i].productId.salesPrice%> </td>
                                             <td> <%=order.products[i].quantity%> </td>
-                                            <td class="text-end"> ₹<%=order.products[i].productId.salesPrice * order.products[i].quantity %> </td>
+                                            <td class="text-end"> ₹<%=order.products[i].productId.salesPrice * order.products[i].quantity - order.discount %> </td>
                                         </tr>
                                         <%}%>
                                 

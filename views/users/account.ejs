@@ -67,12 +67,13 @@
             <div class="container">
                 <div class="header-wrap">
                     <div class="logo logo-width-1">
-                        <a href="/homePage"><img src="assets/imgs/theme/logo.svg" alt="logo"></a>
+                        <a href="/home"><img src="assets/imgs/theme/logo.svg" alt="logo"></a>
                     </div>
                     <div class="header-right">
                         <div class="search-style-2">
                             <form action="/" method="post">
                                 <select name="cat" class="select-active">
+                                    <option value="all">All Categories</option>
                                 <%for(let i=0;i<categories.length;i++){%>
                                     <%if(categories[i].status){%>
                                     <option value="<%=categories[i]._id%>"><%=categories[i].name%></option>  
@@ -95,6 +96,11 @@
                                         <img alt="Evara" src="assets/imgs/theme/icons/icon-cart.svg">
                                     </a>
                                     
+                                </div>
+                                <div class="header-action-icon-2">
+                                    <a href="/wallet">
+                                        <img src="assets/imgs/theme/icons/icon-wallet.svg" alt="Wallet">
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -365,7 +371,7 @@
         <div class="page-header breadcrumb-wrap">
             <div class="container">
                 <div class="breadcrumb">
-                    <a href="index.html" rel="nofollow">Home</a>
+                    <a href="/home" rel="nofollow">Home</a>
                     <span></span> Pages
                     <span></span> Account
                 </div>
@@ -485,7 +491,7 @@
                                                                                 <td><span class="badge rounded-pill alert-danger"><%= item.orderStatus %></span></td>
                                                                                 <%}%>
                                                                             
-                                                                            <td>₹<%= item.totalAmount %></td>
+                                                                            <td>₹<%= item.discountedAmount %></td>
                                                                             <td><%=item.PaymentMethod%></td>
                                                                             <td><a href="/getorderdetails?OID=<%=item._id%>" class="btn-small d-block">View</a></td>
                                                                         </tr>

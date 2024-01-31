@@ -79,6 +79,7 @@
                         <div class="search-style-2">
                             <form action="/" method="post">
                                 <select name="cat" class="select-active">
+                                    <option value="all">All Categories</option>
                                 <%for(let i=0;i<category.length;i++){%>
                                     <%if(category[i].status){%>
                                     <option><%=category[i].name%></option>  
@@ -102,6 +103,11 @@
                                        
                                     </a>
                                     
+                                </div>
+                                <div class="header-action-icon-2">
+                                    <a href="/wallet">
+                                        <img src="assets/imgs/theme/icons/icon-wallet.svg" alt="Wallet">
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -194,37 +200,27 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-lg-9">
-                            <header class="border-bottom mb-4 pb-4">
-                                <div class="row">
-
-
-                                   
-                            </header>
-
-
-                            <!-- card-header end// -->
+                            <!-- Your existing content here -->
+    
                             <div class="table-responsive">
                                 <table>
-                                    <thead>
-                                      <tr>
+                                    <tr>
                                         <th>Transaction type</th>
                                         <th>Amount</th>
                                         <th>Description</th>
                                         <th>Date</th>
-                                        <th class="text-end print-hidden">Balance</th>
+                                        
                                       </tr>
                                     </thead>
                                     <tbody>
-                                        <% if (wallet && wallet.transactions && wallet.transactions.length > 0) { %>
-                                          <% wallet.transactions.forEach(transaction => { %>
+                                        <% if (wallet && wallet.transcactions && wallet.transcactions.length > 0) { %>
+                                          <% wallet.transcactions.forEach(transaction => { %>
                                             <tr>
                                               <td><%= transaction.type %></td>
                                               <td><%= transaction.amount %></td>
                                               <td><%= transaction.description %></td>
                                               <td><%= transaction.date.toISOString().split('T')[0] %></td>
-                                              <td class="text-end print-hidden">
-                                                <%= calculateBalance(transaction) %>
-                                              </td>
+                                              
                                             </tr>
                                           <% }); %>
                                         <% } else { %>
@@ -237,16 +233,24 @@
                                       
                                   </table>
                             </div> <!-- table-responsive.// -->
+    
                         </div> <!-- col end// -->
-                                           </div> <!-- row end// -->
+    
+                        <div class="col-lg-3">
+                            <div class="box bg-light" style="min-height:80%">
+                                <h6 class="mt-15">Balance</h6>
+                                <p class="h4">₹<%=wallet.balance%>.00</p>
+                                <hr>
+                            </div>
+                        </div> <!-- col end// -->
+                    </div> <!-- row end// -->
                 </div> <!-- card-body // -->
             </div> <!-- card end// -->
-
         </section>
     </main>
-  
+    
+    
 
-    </main>
     <script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
     <script src="/assets/js/vendors/bootstrap.bundle.min.js"></script>
     <script src="/assets/js/vendors/select2.min.js"></script>

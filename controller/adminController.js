@@ -352,40 +352,85 @@ const editProductLoad  = async(req,res)=>{
 const editProduct = async (req,res)=>{
     try {
         const productId = req.query.id;
-        console.log(productId,'3241');
+        const product = await Products.findById(productId)
         const images = req.files ? req.files.map(file => file.path) : [];
         const sizes = req.body.sizes.quantity;
-        console.log(sizes,'afds');
         const category = req.body.category;
-        console.log(category,'categ');
-        const updatedProduct = await Products.findByIdAndUpdate(
-            productId,
-            { $set: {
-                 name: req.body.name,
-                 description: req.body.description,
-                 regularPrice: req.body.regularPrice,
-                 salesPrice:req.body.salesPrice,
-                 category:category,
-                 images:images,
-                 sizes: [
-                    {
-                        s: { quantity: sizes.s },
-                        m: { quantity: sizes.m },
-                        l: { quantity: sizes.l }
-                    }
-                ]
-                } },
-            { new: true } 
-        );
-        if (!updatedProduct) {
-            return res.status(404).send('Category not found');
-        }
+
+        let Newimages = []
+            req.files.forEach((image) => {
+                Newimages.push(
+                    image.path
+                )
+            })
+           
+
+            Newimages.forEach((image) => {
+                product.images.push(
+                    image
+                )
+            })
+
+            product.name= req.body.name;
+            product.description = req.body.description;
+            product.regularPrice = req.body.regularPrice;
+            product.salesPrice = req.body.salesPrice;
+            product.category = category;
+            product.sizes= [
+                {
+                    s: { quantity: sizes.s },
+                    m: { quantity: sizes.m },
+                    l: { quantity: sizes.l }
+                }
+            ]
+
+        await product.save();
         res.redirect('/admin/productList');
     } catch (error) {
         // res.redirect('/admin/error')
         console.log(error.message);
     }
 }
+
+const deleteImage = async (req, res) => {
+    const productId = req.params.productId;
+    const imageIndex = req.params.imageIndex;
+  
+
+    try {
+        const product = await Products.findOne({ _id: productId });
+
+        if (!product) {
+            return res.status(200).send('Product not found');
+        }
+
+        if (!product.images || !Array.isArray(product.images)) {
+            return res.status(500).send('Invalid image data for the product');
+        }
+
+        // Check if imageIndex is valid
+        if (imageIndex >= 0 && imageIndex < product.images.length) {
+            // Remove the image at imageIndex
+            product.images.splice(imageIndex, 1);
+
+            // Save the updated product
+            const updated = await product.save();
+
+            if (updated) {
+                return res.redirect(`/admin/editproduct/${productId}`);
+            } else {
+                return res.status(500).send('Error updating product');
+            }
+        } else {
+            return res.status(400).send('Invalid image index');
+        }
+    } catch (error) {
+        
+        res.redirect('/admin/error')
+    }
+
+};
+
 
 const loadSalesReport =  async(req,res)=>{
     try {
@@ -670,6 +715,7 @@ module.exports={
     blockProduct,
     editProductLoad,
     editProduct,
+    deleteImage,
     loadSalesReport,
     searchSalesReport,
     // loadVariantPage,

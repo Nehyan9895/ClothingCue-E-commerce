@@ -74,6 +74,7 @@
                         <div class="search-style-2">
                             <form action="/" method="post">
                                 <select name="cat" class="select-active">
+                                    <option value="all">All Categories</option>
                                 <%for(let i=0;i<category.length;i++){%>
                                     <%if(category[i].status){%>
                                     <option value="<%=category[i]._id%>"><%=category[i].name%></option>  
@@ -571,7 +572,7 @@
                                 </div>
                             </div>
                             <button type="submit" class="btn btn-fill-out btn-block mt-30">Place Order(COD)</button>
-                            <% if (user.wallet > Math.ceil(totalAmount - discount)) { %>
+                            <% if (wallet[0].balance > Math.ceil(totalAmount - discount)) { %>
                                 <input type="text" id="walletInput" name="wallet" value="wallet" hidden>
                                 <button type="submit" class="btn btn-fill-out btn-block mt-30" onclick="submitForm(event)">Wallet Pay</button>
                             <% } %>

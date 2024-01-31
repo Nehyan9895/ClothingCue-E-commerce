@@ -141,6 +141,7 @@
                         <div class="search-style-2">
                             <form action="/" method="post">
                                 <select name="cat" class="select-active">
+                                    <option value="all">All Categories</option>
                                 <%for(let i=0;i<categories.length;i++){%>
                                     <%if(categories[i].status){%>
                                     <option value="<%=categories[i]._id%>"><%=categories[i].name%></option>  
@@ -426,14 +427,15 @@
                                 <% categories.filter(category => category.status).forEach(category => { %>
                                     <div class="card-1">
                                         <figure class="img-hover-scale overflow-hidden">
-                                            <a href="<%= category.link || 'shop-grid-right.html' %>">
+                                            <a href="<%= '/categorysearch?catId=' + category._id %>">
                                                 <img src="<%= category.image || 'assets/imgs/shop/default-category-image.jpg' %>" alt="">
                                             </a>
                                         </figure>
-                                        <h5><a href="<%= category.link || 'shop-grid-right.html' %>"><%= category.name || 'Category' %></a></h5>
+                                        <h5><a href="<%= '/categorysearch?catId=' + category._id || 'shop-grid-right.html' %>"><%= category.name || 'Category' %></a></h5>
                                     </div>
                                 <% }); %>
                             </div>
+                            
                         </div>
                     </div>
                 </section>

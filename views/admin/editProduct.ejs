@@ -259,10 +259,25 @@
                                     </div>
                                     <div class="col-md-9">
                                         <div class="mb-4">
-                                            <label class="form-label">Images</label>
-                                            <input required class="form-control"  name="images" id="images" type="file" multiple accept="image/*">
-                                            
-                                                
+                                            <div class="input-upload">
+                                                <% for(let i=0; i<products.images.length; i++) { %>
+                                                  
+                                                     
+                                                    <div class="image-preview">
+                                                        <button type="button" class="btn btn-danger delete-image rounded-circle" onclick="deleteImage(`<%=i%>`, `<%=products._id%>`)">
+            
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                        <img src="/<%=products.images[i]%>" alt="">
+                                                        <div id="image-preview-container" class="d-flex flex-wrap">
+                           
+                                                        </div>
+                                                    </div>
+                                                <% } %>
+                                                <br>
+                                                <input accept="image/*" id="images" name="images" class="form-control" type="file" multiple>
+                                            </div>
+                                        </div>
                                         </div>
                                     </div> <!-- col.// -->
                                 </div> <!-- .row end// -->
@@ -302,9 +317,7 @@
                     <div class="mb-4">
                         <h6>Images Preview</h6>
                         <div id="image-preview-container" class="d-flex flex-wrap">
-                            <% products.images.forEach(image => { %>
-                                <img src="/<%= image %>" alt="Product Image" style="max-width: 100px; width: 100%;">
-                            <% }); %>
+                           
                         </div>
                     </div>
                 </div>
@@ -335,6 +348,32 @@
     <script src="/admin-assets/js/vendors/jquery.fullscreen.min.js"></script>
     <!-- Main Script -->
     <script src="/admin-assets/js/main.js" type="text/javascript"></script>
+    <script>
+        function deleteImage(index,productId) {
+           
+    const imagePreview = document.querySelectorAll('.image-preview')[index];
+    if (imagePreview) {
+        imagePreview.remove();
+    } else {
+        // Handle error if deletion was not successful
+    }
+    fetch(`/admin/deleteImage/${productId}/${index}`, {
+        method: 'DELETE'
+       
+    })
+    .then(response => response.json())
+    .then(data => {
+        
+          
+           
+    })
+    .catch(error => {
+          console.log(error);
+    });
+   
+}
+
+        </script>
     <script>
         let sizeCounter = 1;
 

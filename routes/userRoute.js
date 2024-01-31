@@ -36,9 +36,10 @@ user_route.post('/login',user_controller.verifyLogin);
 user_route.get('/logout',user_controller.userLogout);
 
 //for loading home page
-user_route.get('/home',auth.isLogin,user_controller.loadHome);
-user_route.get('/productDetails',auth.isLogin,user_controller.loadProductDetails);
+user_route.get('/home',user_controller.loadHome);
+user_route.get('/productDetails',user_controller.loadProductDetails);
 user_route.get('/shop',user_controller.pagination)
+user_route.get('/categorysearch',user_controller.categorySearch)
 user_route.get('/sorting',user_controller.sorting)
 user_route.post('/',user_controller.searchResult);
 //for cart 
