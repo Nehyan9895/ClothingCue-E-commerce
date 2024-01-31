@@ -38,6 +38,6 @@ app.use('/',userRoute);
 const adminRoute = require('./routes/adminRoute');
 app.use('/admin',adminRoute);
 
-app.listen(7000,()=>{
+app.listen(7001,()=>{
     console.log('Server Started...');
 })
